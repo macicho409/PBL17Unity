@@ -1,1 +1,1 @@
-# PBL17Unity
+# PBL17 - Wirtualny symulator przestrzeni miejskiej
