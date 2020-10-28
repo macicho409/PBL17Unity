@@ -7,7 +7,7 @@ using UnityEngine;
 
 
 
-public class PhysiologicalNeeds : MonoBehaviour
+public class PhysiologicalModel : MonoBehaviour
 {
   
     /*===================================================================================       
