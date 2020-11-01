@@ -49,7 +49,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
         private void FixedUpdate()
         {
             // read inputs
-            if (counter % 200 == 0)
+            if (counter % 100 == 0)
             {
                 h = UnityEngine.Random.Range(-1.0f, 1.0f);
                 v = UnityEngine.Random.Range(-1.0f, 1.0f);
