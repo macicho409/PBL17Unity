@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Specialized;
 using UnityEngine;
 using UnityStandardAssets.CrossPlatformInput;
 
@@ -12,8 +13,10 @@ namespace UnityStandardAssets.Characters.ThirdPerson
         private Vector3 m_CamForward;             // The current forward direction of the camera
         private Vector3 m_Move;
         private bool m_Jump;                      // the world-relative desired move direction, calculated from the camForward and user input.
+        private float h = 0;
+        private float v = 0;
+        private int counter = 0;
 
-        
         private void Start()
         {
             // get the transform of the main camera
@@ -46,11 +49,14 @@ namespace UnityStandardAssets.Characters.ThirdPerson
         private void FixedUpdate()
         {
             // read inputs
-            float h = CrossPlatformInputManager.GetAxis("Horizontal");
-            float v = CrossPlatformInputManager.GetAxis("Vertical");
+            if (counter % 100 == 0)
+            {
+                h = UnityEngine.Random.Range(-1.0f, 1.0f);
+                v = UnityEngine.Random.Range(-1.0f, 1.0f);
+            }
+            counter++;
             bool crouch = Input.GetKey(KeyCode.C);
-            h /= 2;
-            v /= 2;
+
             // calculate move direction to pass to character
             if (m_Cam != null)
             {
@@ -62,6 +68,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
             {
                 // we use world-relative directions in the case of no main camera
                 m_Move = v*Vector3.forward + h*Vector3.right;
+                
             }
 #if !MOBILE_INPUT
 			// walk speed multiplier
