@@ -4,204 +4,87 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Net.Security;
 using UnityEngine;
-
-
+using Assets.Scripts.Models;
+using UnityEngine.PlayerLoop;
 
 public class PhysiologicalModel : MonoBehaviour
 {
-  
-    /*===================================================================================       
-                                     STATE VARIABLES
-     ===================================================================================*/
+    #region [vars]
 
-    private float food;
-    public float Food { get { return food; } set { food = value; } }
+    public Need FoodNeed { get; set; }
+    public Need WaterNeed { get; set; }
+    public Need DreamNeed { get; set; }
+    public Need SexNeed { get; set; }
+    public Need ToiletNeed { get; set; }
 
-    private float water;
-    public float Water { get { return water; } set { water = value; } }
-
-    private float sleep;
-    public float Sleep { get { return sleep; } set { sleep = value; } }
-
-    private float sex;
-    public float Sex { get { return sex; } set { sex = value; } }
-
-    private float dream;
-    public float Dream { get { return dream; } set { dream = value; } }
-
-    private float toilet;
-    public float Toilet { get { return toilet; } set { toilet = value; } }
-
-    /*===================================================================================       
-                                    ACTION VARIABLES
-     ===================================================================================*/
-
-    private float action;
-    public float Action { get { return action; } set { action = value; } }
-
-    private float actioncostfood;
-    public float ActionCostFood { get { return actioncostfood; } set { actioncostfood = value; } }
-
-    private float actioncostwater;
-    public float ActionCostWater { get { return actioncostwater; } set { actioncostwater = value; } }
-
-    private float actioncostdream;
-    public float ActionCostDream { get { return actioncostdream; } set { actioncostdream = value;  } }
-
-    /*===================================================================================       
-                                   WEIGHT VARIABLES
-     ===================================================================================*/
-
-    private float timeweightfood;
-    public float TimeWeightFood { get { return timeweightfood; } set { timeweightfood = value; } }
-
-    private float timeweightwater;
-    public float TimeWeightWater { get { return timeweightwater; } set { timeweightwater = value; } }
-
-    private float timeweightdream;
-    public float TimeWeightDream { get { return timeweightdream; } set { timeweightdream = value; } }
-
-    private float timeweightsex;
-    public float TimeWeightSex { get { return timeweightsex; } set { timeweightsex = value; } }
-
-    private float timeweightoilet;
-    public float TimeWeightToilet { get { return timeweightoilet; } set { timeweightoilet = value; } }
-
-
-
-
-
-
-
-
-    /*===================================================================================       
-                                 INITIAL VALUES OF VARIABLES
-     ===================================================================================*/
+    #endregion
 
     void Start()
     {
-        // variables declared fo test
+        FoodNeed = new Need
+        {
+            Value = 1.0f,
+            ActionCost = 0.0f,
+            TimeWeight = 0.01f,
+            Name = "Food",
+            OnUpdateFunc = (float value, float actionCost, float timeWeight, float action, float time) =>
+            value - (action * actionCost + timeWeight) * (float)Math.Sqrt(value) * time
+        };
 
-        //State declared
-        food = 1.0f;
-        water = 1.0f;
-        sleep = 1.0f;
-        sex = 1.0f;
-        dream = 1.0f;
-        toilet = 1.0f;
+        WaterNeed = new Need
+        {
+            Value = 1.0f,
+            ActionCost = 0.0f,
+            TimeWeight = 0.01f,
+            Name = "Water",
+            OnUpdateFunc = (float value, float actionCost, float timeWeight, float action, float time) =>
+            value - (action * actionCost + timeWeight) * (float)Math.Sqrt(value) * time
+        };
 
-        //Action declared
-        action = 0.0f;
-        actioncostfood = 0.0f;
-        actioncostwater = 0.0f;
-        actioncostdream = 0.0f;
+        DreamNeed = new Need
+        {
+            Value = 1.0f,
+            ActionCost = 0.0f,
+            TimeWeight = 0.01f,
+            Name = "Dream",
+            OnUpdateFunc = (float value, float actionCost, float timeWeight, float action, float time) =>
+            value - (action * actionCost + timeWeight) * (float)Math.Sqrt(value) * time
+        };
 
-        //Weight declared
-        timeweightfood = 0.01f;
-        timeweightwater = 0.01f;
-        timeweightdream = 0.01f;
-        timeweightsex = 0.01f;
-        timeweightoilet = 0.01f;
+        SexNeed = new Need
+        {
+            LowerLimit = 0.3f,
+            Value = 1.0f,
+            ActionCost = 0.0f,
+            TimeWeight = 0.01f,
+            Name = "Sex",
+            OnUpdateFunc = (float value, float actionCost, float timeWeight, float action, float time) =>
+            value - timeWeight * (float)Math.Sqrt(value - 0.3f) * time
+        };
+
+        ToiletNeed = new Need
+        {
+            Value = 1.0f,
+            ActionCost = 0.0f,
+            TimeWeight = 0.01f,
+            Name = "Toilet",
+            OnUpdateFunc = (float value, float actionCost, float timeWeight, float action, float time) =>
+            value - timeWeight * (float)Math.Sqrt(value) * time
+        };
     }
 
-
-    /*===================================================================================       
-                                    UPDATE VALUES PER FRAME 
-     ===================================================================================*/
-
-    void Update()
+    void Update() //update per frame
     {
-        UpdateFood();
-        UpdateWater();
-        UpdateDream();
-        UpdateSex();
-        UpdateToilet();
+        UpdateNeed(FoodNeed);
+        UpdateNeed(WaterNeed);
+        UpdateNeed(DreamNeed);
+        UpdateNeed(SexNeed);
+        UpdateNeed(ToiletNeed);
     }
 
-
-    /*===================================================================================       
-                                            FUNCTION 
-     ===================================================================================*/
-
-
-    private void UpdateFood()
+    private void UpdateNeed(Need need)
     {
-        food = food - (action * actioncostfood + timeweightfood) * (float)Math.Sqrt(food) * Time.deltaTime;
-
-        if(food <= 0.0f)
-        {
-            food = 0.0f;
-        }
-        else if(food >= 1.0f)
-        {
-            food = 1.0f;
-        }
-
-        UnityEngine.Debug.Log("Food: " + food);
+        need.Update(0, Time.deltaTime);
+        UnityEngine.Debug.Log(need.Name + ": " + need.Value);
     }
-
-    private void UpdateWater()
-    {
-        water = water - (action * actioncostwater + timeweightwater) * (float)Math.Sqrt(water) * Time.deltaTime;
-
-        if(water <= 0.0f)
-        {
-            water = 0.0f;
-        }
-        else if(water >= 1.0f)
-        {
-            water = 1.0f;
-        }
-        UnityEngine.Debug.Log("Water: " + water);
-    }
-
-    private void UpdateDream()
-    {
-        dream = dream - (action * actioncostdream + timeweightdream) * (float)Math.Sqrt(dream) * Time.deltaTime;
-
-        if (dream <= 0.0f)
-        {
-            dream = 0.0f;
-        }
-        else if (dream >= 1.0f)
-        {
-            dream = 1.0f;
-        }
-
-        UnityEngine.Debug.Log("Dream: " + dream);
-    }
-
-    private void UpdateSex()
-    {
-        sex = sex - timeweightsex * (float)Math.Sqrt(Math.Abs(sex - 0.3f)) * Time.deltaTime;
-
-        if (sex <= 0.3f)
-        {
-            sex = 0.3f;
-        }
-        else if (dream >= 1.0f)
-        {
-            sex = 1.0f;
-        }
-
-        UnityEngine.Debug.Log("Sex: " + sex);
-    }
-
-    private void UpdateToilet()
-    {
-        toilet = toilet - timeweightoilet * (float)Math.Sqrt(toilet) * Time.deltaTime;
-
-        if (toilet <= 0.0f)
-        {
-            toilet = 0.0f;
-        }
-        else if (toilet >= 1.0f)
-        {
-            toilet = 1.0f;
-        }
-
-        UnityEngine.Debug.Log("Toilet: " + toilet);
-    }
-
-
 }
