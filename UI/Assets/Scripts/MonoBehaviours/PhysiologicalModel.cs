@@ -73,7 +73,7 @@ public class PhysiologicalModel : MonoBehaviour
         };
     }
 
-    void Update() //update per frame
+    void Update()
     {
         UpdateNeed(FoodNeed);
         UpdateNeed(WaterNeed);

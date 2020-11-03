@@ -9,21 +9,38 @@ namespace Assets.Scripts.Models
 {
     public class Need
     {
-        private float _val; //current value stored as private to handle range limit
+        /// <summary>
+        /// Current value stored as private to handle range limit
+        /// </summary>
+        private float _val;
 
         public float LowerLimit { get; set; } = 0.0f;
         public float UpperLimit { get; set; } = 1.0f;
 
+        /// <summary>
+        /// To set value outside the 0-1 limit change UpperLimit and LowerLimit
+        /// </summary>
         public float Value { get { return _val; } set { _val = value.LimitToRange(LowerLimit, UpperLimit); } }
 
         public float ActionCost { get; set; }
         public float TimeWeight { get; set; }
 
-        public string Name { get; set; } //used as a label for debuggin
+        /// <summary>
+        /// Used as a label for debugging
+        /// </summary>
+        public string Name { get; set; }
 
-        public Func<float, float, float, float, float, float> OnUpdateFunc { get; set; } //pass lambda expression to change what's happening on Update method
+        /// <summary>
+        /// Pass lambda expression to change what's happening on Update method in form: (value, actionCost, timeWeight, action, time)
+        /// </summary>
+        public Func<float, float, float, float, float, float> OnUpdateFunc { get; set; }
 
-        public void Update(float action, float time) //changes the value stored in a way described by OnUpdateFunc
+        /// <summary>
+        /// Changes the value stored in a way described by OnUpdateFunc
+        /// </summary>
+        /// <param name="action">Action value</param>
+        /// <param name="time">Passing time - usually Time.deltaTime</param>
+        public void Update(float action, float time)
         {
             this.Value = OnUpdateFunc.Invoke(this.Value, this.ActionCost, this.TimeWeight, action, time);
         }
