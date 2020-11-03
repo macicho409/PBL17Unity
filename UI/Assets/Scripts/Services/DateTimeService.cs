@@ -1,0 +1,18 @@
+﻿using Assets.Scripts.ExtensionMethods;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using UnityEngine;
+
+namespace Assets.Scripts.Services
+{
+    public static class DateTimeService
+    {
+        public static DateTime CurrentDateTime { get { return DateTime.MinValue.AddSeconds(Time.time); } }
+
+        //current game speed, limited
+        public static float GameSpeed { get { return Time.timeScale; } set { Time.timeScale = value.LimitToRange(0.0f, 3.0f); } }
+    }
+}
