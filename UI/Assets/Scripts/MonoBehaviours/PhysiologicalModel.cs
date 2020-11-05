@@ -6,6 +6,8 @@ using System.Net.Security;
 using UnityEngine;
 using Assets.Scripts.Models;
 using UnityEngine.PlayerLoop;
+using Assets.Scripts.Menu;
+using UnityEngine.UI;
 
 public class PhysiologicalModel : MonoBehaviour
 {
@@ -16,6 +18,11 @@ public class PhysiologicalModel : MonoBehaviour
     public Need DreamNeed { get; set; }
     public Need SexNeed { get; set; }
     public Need ToiletNeed { get; set; }
+    public ScriptSlider FoodSlider { get; set; }
+    public ScriptSlider WaterSlider { get; set; }
+    public ScriptSlider DreamSlider { get; set; }
+    public ScriptSlider SexSlider { get; set; }
+    public ScriptSlider ToiletSlider { get; set; }
 
     #endregion
 
@@ -71,20 +78,58 @@ public class PhysiologicalModel : MonoBehaviour
             OnUpdateFunc = (float value, float actionCost, float timeWeight, float action, float time) =>
             value - timeWeight * (float)Math.Sqrt(value) * time
         };
+
+        FoodSlider = new ScriptSlider
+        {
+            Value = 1.0f,
+            NeedsOn = true,
+            Sllider = GameObject.Find("SliderFood").GetComponent<UnityEngine.UI.Slider>()
+        };
+
+        WaterSlider = new ScriptSlider
+        {
+            Value = 1.0f,
+            NeedsOn = true,
+            Sllider = GameObject.Find("SliderWater").GetComponent<UnityEngine.UI.Slider>()
+        };
+
+        DreamSlider = new ScriptSlider
+        {
+            Value = 1.0f,
+            NeedsOn = true,
+            Sllider = GameObject.Find("SliderDream").GetComponent<UnityEngine.UI.Slider>()
+        };
+
+
+        SexSlider = new ScriptSlider
+        {
+            Value = 1.0f,
+            NeedsOn = true,
+            Sllider = GameObject.Find("SliderSex").GetComponent<UnityEngine.UI.Slider>()
+        };
+
+        ToiletSlider = new ScriptSlider
+        {
+            Value = 1.0f,
+            NeedsOn = true,
+            Sllider = GameObject.Find("SliderToilet").GetComponent<UnityEngine.UI.Slider>()
+        };
+
     }
 
     void Update()
     {
-        UpdateNeed(FoodNeed);
-        UpdateNeed(WaterNeed);
-        UpdateNeed(DreamNeed);
-        UpdateNeed(SexNeed);
-        UpdateNeed(ToiletNeed);
+        UpdateNeed(FoodNeed, FoodSlider);
+        UpdateNeed(WaterNeed, WaterSlider);
+        UpdateNeed(DreamNeed, DreamSlider);
+        UpdateNeed(SexNeed, SexSlider);
+        UpdateNeed(ToiletNeed, ToiletSlider);
+        
     }
 
-    private void UpdateNeed(Need need)
+    private void UpdateNeed(Need need, ScriptSlider slider)
     {
         need.Update(0, Time.deltaTime);
-        UnityEngine.Debug.Log(need.Name + ": " + need.Value);
+        slider.Updateslider(need.Value);
     }
 }
