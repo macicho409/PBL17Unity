@@ -6,8 +6,8 @@ using System.Net.Security;
 using UnityEngine;
 using Assets.Scripts.Models;
 using UnityEngine.PlayerLoop;
-using Assets.Scripts.Menu;
 using UnityEngine.UI;
+using Assets.Scripts.Models.Enums;
 
 public class PhysiologicalModel : MonoBehaviour
 {
@@ -18,11 +18,12 @@ public class PhysiologicalModel : MonoBehaviour
     public Need DreamNeed { get; set; }
     public Need SexNeed { get; set; }
     public Need ToiletNeed { get; set; }
-    public ScriptSlider FoodSlider { get; set; }
-    public ScriptSlider WaterSlider { get; set; }
-    public ScriptSlider DreamSlider { get; set; }
-    public ScriptSlider SexSlider { get; set; }
-    public ScriptSlider ToiletSlider { get; set; }
+
+    public NeedDisplay FoodSlider { get; set; }
+    public NeedDisplay WaterSlider { get; set; }
+    public NeedDisplay DreamSlider { get; set; }
+    public NeedDisplay SexSlider { get; set; }
+    public NeedDisplay ToiletSlider { get; set; }
 
     #endregion
 
@@ -79,42 +80,11 @@ public class PhysiologicalModel : MonoBehaviour
             value - timeWeight * (float)Math.Sqrt(value) * time
         };
 
-        FoodSlider = new ScriptSlider
-        {
-            Value = 1.0f,
-            NeedsOn = true,
-            Sllider = GameObject.Find("SliderFood").GetComponent<UnityEngine.UI.Slider>()
-        };
-
-        WaterSlider = new ScriptSlider
-        {
-            Value = 1.0f,
-            NeedsOn = true,
-            Sllider = GameObject.Find("SliderWater").GetComponent<UnityEngine.UI.Slider>()
-        };
-
-        DreamSlider = new ScriptSlider
-        {
-            Value = 1.0f,
-            NeedsOn = true,
-            Sllider = GameObject.Find("SliderDream").GetComponent<UnityEngine.UI.Slider>()
-        };
-
-
-        SexSlider = new ScriptSlider
-        {
-            Value = 1.0f,
-            NeedsOn = true,
-            Sllider = GameObject.Find("SliderSex").GetComponent<UnityEngine.UI.Slider>()
-        };
-
-        ToiletSlider = new ScriptSlider
-        {
-            Value = 1.0f,
-            NeedsOn = true,
-            Sllider = GameObject.Find("SliderToilet").GetComponent<UnityEngine.UI.Slider>()
-        };
-
+        FoodSlider = new NeedDisplay(GameObject.Find(SliderEnum.SliderFood.ToString()).GetComponent<UnityEngine.UI.Slider>());
+        WaterSlider = new NeedDisplay(GameObject.Find(SliderEnum.SliderWater.ToString()).GetComponent<UnityEngine.UI.Slider>());
+        DreamSlider = new NeedDisplay(GameObject.Find(SliderEnum.SliderDream.ToString()).GetComponent<UnityEngine.UI.Slider>());
+        SexSlider = new NeedDisplay(GameObject.Find(SliderEnum.SliderSex.ToString()).GetComponent<UnityEngine.UI.Slider>());
+        ToiletSlider = new NeedDisplay(GameObject.Find(SliderEnum.SliderToilet.ToString()).GetComponent<UnityEngine.UI.Slider>());
     }
 
     void Update()
@@ -124,12 +94,11 @@ public class PhysiologicalModel : MonoBehaviour
         UpdateNeed(DreamNeed, DreamSlider);
         UpdateNeed(SexNeed, SexSlider);
         UpdateNeed(ToiletNeed, ToiletSlider);
-        
     }
 
-    private void UpdateNeed(Need need, ScriptSlider slider)
+    private void UpdateNeed(Need need, NeedDisplay slider)
     {
         need.Update(0, Time.deltaTime);
-        slider.Updateslider(need.Value);
+        slider.Value = need.Value;
     }
 }
