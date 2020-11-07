@@ -19,11 +19,6 @@ public class PhysiologicalModel : MonoBehaviour
     public Need SexNeed { get; set; }
     public Need ToiletNeed { get; set; }
 
-    public NeedDisplay FoodSlider { get; set; }
-    public NeedDisplay WaterSlider { get; set; }
-    public NeedDisplay DreamSlider { get; set; }
-    public NeedDisplay SexSlider { get; set; }
-    public NeedDisplay ToiletSlider { get; set; }
 
     #endregion
 
@@ -80,25 +75,19 @@ public class PhysiologicalModel : MonoBehaviour
             value - timeWeight * (float)Math.Sqrt(value) * time
         };
 
-        FoodSlider = new NeedDisplay(GameObject.Find(SliderEnum.SliderFood.ToString()).GetComponent<UnityEngine.UI.Slider>());
-        WaterSlider = new NeedDisplay(GameObject.Find(SliderEnum.SliderWater.ToString()).GetComponent<UnityEngine.UI.Slider>());
-        DreamSlider = new NeedDisplay(GameObject.Find(SliderEnum.SliderDream.ToString()).GetComponent<UnityEngine.UI.Slider>());
-        SexSlider = new NeedDisplay(GameObject.Find(SliderEnum.SliderSex.ToString()).GetComponent<UnityEngine.UI.Slider>());
-        ToiletSlider = new NeedDisplay(GameObject.Find(SliderEnum.SliderToilet.ToString()).GetComponent<UnityEngine.UI.Slider>());
     }
 
     void Update()
     {
-        UpdateNeed(FoodNeed, FoodSlider);
-        UpdateNeed(WaterNeed, WaterSlider);
-        UpdateNeed(DreamNeed, DreamSlider);
-        UpdateNeed(SexNeed, SexSlider);
-        UpdateNeed(ToiletNeed, ToiletSlider);
+        UpdateNeed(FoodNeed);
+        UpdateNeed(WaterNeed);
+        UpdateNeed(DreamNeed);
+        UpdateNeed(SexNeed);
+        UpdateNeed(ToiletNeed);
     }
 
-    private void UpdateNeed(Need need, NeedDisplay slider)
+    private void UpdateNeed(Need need)
     {
         need.Update(0, Time.deltaTime);
-        slider.Value = need.Value;
     }
 }

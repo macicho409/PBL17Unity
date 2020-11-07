@@ -14,8 +14,17 @@ namespace Assets.Scripts.Models
         /// Current value stored as private
         /// </summary>
         private float _val;
+        private Slider _slider;
 
-        public Slider Slider { get; set; }
+        public Slider Slider {
+            get { return this._slider; }
+            set{
+                if(!_slider)
+                {
+                    this._slider = value;
+                }
+            } 
+        }
 
         /// <summary>
         /// Sets also this.Slider.value if Slider is not null
