@@ -19,9 +19,14 @@ namespace Assets.Scripts.Models
         public Slider Slider {
             get { return this._slider; }
             set{
-                if(!_slider)
+
+                try 
                 {
-                    this._slider = value;
+                        this._slider = value;
+                }
+                catch
+                {
+
                 }
             } 
         }
@@ -42,7 +47,7 @@ namespace Assets.Scripts.Models
             } 
         }
 
-        public NeedDisplay(Slider slider, float initValue = 1.0f)
+        public NeedDisplay(Slider slider, float initValue = 0.0f)
         {
             this.Slider = slider;
             this.Value = initValue;

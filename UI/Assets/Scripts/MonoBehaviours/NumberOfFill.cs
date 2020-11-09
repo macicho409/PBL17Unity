@@ -20,4 +20,9 @@ public class NumberOfFill : MonoBehaviour
     {
         textNumberOfFill.text = Mathf.RoundToInt((value - LowerLimit)/(UpperLimit - LowerLimit )* 100).ToString() + "%";
     }
+
+    public void TextUpdateNoNormalization(float value)
+    {
+        textNumberOfFill.text = Mathf.RoundToInt(value).ToString();
+    }
 }

@@ -23,23 +23,18 @@ public class SelectObject : MonoBehaviour
     void Start()
     {
         hitInfo = new RaycastHit();
+            
         FoodSlider = new NeedDisplay(GameObject.Find(SliderEnum.SliderFood.ToString()).GetComponent<Slider>());
         WaterSlider = new NeedDisplay(GameObject.Find(SliderEnum.SliderWater.ToString()).GetComponent<Slider>());
         DreamSlider = new NeedDisplay(GameObject.Find(SliderEnum.SliderDream.ToString()).GetComponent<Slider>());
         SexSlider = new NeedDisplay(GameObject.Find(SliderEnum.SliderSex.ToString()).GetComponent<Slider>());
-        ToiletSlider = new NeedDisplay(GameObject.Find(SliderEnum.SliderToilet.ToString()).GetComponent<Slider>());
+        ToiletSlider = new NeedDisplay(GameObject.Find(SliderEnum.SliderToilet.ToString()).GetComponent<Slider>()); 
     }
 
     // Update is called once per frame
     void Update()
     {
-        FoodSlider.Slider = GameObject.Find(SliderEnum.SliderFood.ToString()).GetComponent<Slider>();
-        WaterSlider.Slider = GameObject.Find(SliderEnum.SliderWater.ToString()).GetComponent<Slider>();
-        DreamSlider.Slider = GameObject.Find(SliderEnum.SliderDream.ToString()).GetComponent<Slider>();
-        SexSlider.Slider = GameObject.Find(SliderEnum.SliderSex.ToString()).GetComponent<Slider>();
-        ToiletSlider.Slider = GameObject.Find(SliderEnum.SliderToilet.ToString()).GetComponent<Slider>();
-
-
+        
         if (Input.GetMouseButtonDown(0))
         {   
             hit = Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hitInfo);        
