@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Specialized;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityStandardAssets.CrossPlatformInput;
 
@@ -8,7 +10,12 @@ namespace UnityStandardAssets.Characters.ThirdPerson
     [RequireComponent(typeof (ThirdPersonCharacter))]
     public class ThirdPersonUserControl : MonoBehaviour
     {
+        public List<Transform> Children = new List<Transform>(); // Kids
+        public List<Transform> Parents = new List<Transform>(); // Mother, father
+
         private ThirdPersonCharacter m_Character; // A reference to the ThirdPersonCharacter on the object
+        private ThirdPersonCharacter m_Character2;
+        private GameObject CurrentPartner;
         private Transform m_Cam;                  // A reference to the main camera in the scenes transform
         private Vector3 m_CamForward;             // The current forward direction of the camera
         private Vector3 m_Move;
@@ -53,6 +60,12 @@ namespace UnityStandardAssets.Characters.ThirdPerson
             {
                 h = UnityEngine.Random.Range(-1.0f, 1.0f);
                 v = UnityEngine.Random.Range(-1.0f, 1.0f);
+                //m_Character2 = GetComponent<ThirdPersonCharacter>();
+                if (!IsInvoking("Reproduce"))
+                {
+                    Invoke("Reproduce", 5f);
+                }
+
             }
             counter++;
             bool crouch = Input.GetKey(KeyCode.C);
@@ -78,6 +91,14 @@ namespace UnityStandardAssets.Characters.ThirdPerson
             // pass all parameters to the character control script
             m_Character.Move(m_Move, crouch, m_Jump);
             m_Jump = false;
+        }
+
+        private void Reproduce()
+        {
+            GameObject kid = Instantiate(gameObject, transform.parent);
+            CurrentPartner.GetComponent<ThirdPersonUserControl>().Children.Add(kid.transform);
+            Children.Add(kid.transform);
+            CancelInvoke("Reproduce");
         }
     }
 }
