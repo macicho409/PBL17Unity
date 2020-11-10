@@ -8,7 +8,7 @@ using System;
 
 namespace Assets.Scripts.Models
 {
-    public class NeedDisplay
+    public class NeedSlider
     {
         /// <summary>
         /// Current value stored as private
@@ -18,16 +18,9 @@ namespace Assets.Scripts.Models
 
         public Slider Slider {
             get { return this._slider; }
-            set{
-
-                try 
-                {
-                        this._slider = value;
-                }
-                catch
-                {
-
-                }
+            set {
+                try { this._slider = value; }
+                catch { }
             } 
         }
 
@@ -36,18 +29,15 @@ namespace Assets.Scripts.Models
         /// </summary>
         public float Value { 
             get { return this._val; } 
-            set {
+            set { 
                 this._val = value;
 
-                try
-                {
-                    this.Slider.value = this._val;
-                }
+                try { this.Slider.value = this._val; }
                 catch { }
             } 
         }
 
-        public NeedDisplay(Slider slider, float initValue = 0.0f)
+        public NeedSlider(Slider slider, float initValue = 0.0f)
         {
             this.Slider = slider;
             this.Value = initValue;

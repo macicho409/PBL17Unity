@@ -1,11 +1,11 @@
-﻿using Assets.Scripts.Services;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using Assets.Scripts.Services;
 
-public class GameSpeedDisplayUpdate : MonoBehaviour
+public class ClockDisplayManager : MonoBehaviour
 {
     private TextMeshProUGUI currentTimeDisplay;
 
@@ -16,6 +16,6 @@ public class GameSpeedDisplayUpdate : MonoBehaviour
 
     private void Update()
     {
-        currentTimeDisplay.text = Math.Floor(DateTimeService.GameSpeed).ToString();
+        currentTimeDisplay.text = DateTimeService.CurrentDateTime.ToString("HH:mm:ss");
     }
 }

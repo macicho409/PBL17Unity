@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Assets.Scripts.Services;
 
-public class ChangeGameSpeed : MonoBehaviour
+public class GameSpeedManager : MonoBehaviour
 { 
     /// <summary>
     /// Updates game speed

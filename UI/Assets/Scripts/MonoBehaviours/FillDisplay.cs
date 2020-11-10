@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-public class NumberOfFill : MonoBehaviour
+public class FillDisplay : MonoBehaviour
 {
     TextMeshProUGUI textNumberOfFill;
 
