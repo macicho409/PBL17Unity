@@ -55,12 +55,12 @@ namespace UnityStandardAssets.Characters.ThirdPerson
         private void FixedUpdate()
         {
             // read inputs
-            /*if (counter % 100 == 0)
+            if (counter % 100 == 0)
             {
                 h = UnityEngine.Random.Range(-1.0f, 1.0f);
                 v = UnityEngine.Random.Range(-1.0f, 1.0f);
             }
-            counter++;*/
+            counter++;
             bool crouch = Input.GetKey(KeyCode.C);
 
             // calculate move direction to pass to character
@@ -76,15 +76,18 @@ namespace UnityStandardAssets.Characters.ThirdPerson
                 //m_Move = v*Vector3.forward + h*Vector3.right;
                 
             }
+            m_Character.gowno();
             agent.SetDestination(target.position);
+            m_Character.gowno();
+            //m_Character.Move(new Vector3(0,0,1), crouch, m_Jump);
 #if !MOBILE_INPUT
             // walk speed multiplier
-            //if (Input.GetKey(KeyCode.LeftShift)) m_Move *= 0.5f;
+            if (Input.GetKey(KeyCode.LeftShift)) m_Move *= 0.5f;
 #endif
 
             // pass all parameters to the character control script
             //m_Character.Move(m_Move, crouch, m_Jump);
-            //m_Jump = false;
+            m_Jump = false;
         }
     }
 }
