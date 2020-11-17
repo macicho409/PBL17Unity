@@ -1,65 +1,50 @@
-﻿using System.Collections;
+﻿using Assets.Scripts.ExtensionMethods;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CovidModel : MonoBehaviour
+public class CovidModel
 {
-    // Start is called before the first frame update
+    public bool Infected;
 
-    public GameObject AnotherAgent;
-    public GameObject ThisAgent;
-   
+    private readonly GameObject thisAgent;
 
-    private System.Random rand;
-    private float weightr;
-    private float weighthealth;
-    private float weightmask;
-    private float rsphare;
-    private Helath health;
+    private readonly System.Random rand;
 
+    private readonly float distanceWeigth;
+    private readonly float healthWeigth;
+    private readonly float maskWeigth;
+    private readonly float sphereRadius;
 
-    private float _probability;
-    public float Probability { 
-        get { return _probability; }
-        set
+    public CovidModel(GameObject thisAgent, float distanceWeigth, float healthWeigth, float maskWeigth, float sphereRadius)
+    {
+        this.thisAgent = thisAgent;
+        this.distanceWeigth = distanceWeigth;
+        this.healthWeigth = healthWeigth;
+        this.maskWeigth = maskWeigth;
+        this.sphereRadius = sphereRadius;
+
+        rand = new System.Random();
+    }
+
+    public void InvokeCovidCollision(List<Covid> covidAgents)
+    {
+        foreach(var covidAgent in covidAgents)
         {
-            if (value >= 1f)
-                _probability = 1f;
-            else if (value <= 0f)
-                _probability = 0f;
-            else
-                _probability = value;
+            var health = thisAgent.GetComponent<Helath>();
+
+            var r = sphereRadius - Mathf.Sqrt(
+                Mathf.Pow(thisAgent.transform.position.x - covidAgent.transform.position.x, 2) + 
+                Mathf.Pow(thisAgent.transform.position.y - covidAgent.transform.position.y, 2) + 
+                Mathf.Pow(thisAgent.transform.position.z - covidAgent.transform.position.z, 2));
+
+            var probability = 
+                ((r * distanceWeigth 
+                + (1.0f - health.Value) * healthWeigth 
+                - 0.5f * maskWeigth * (float) Convert.ToDouble(covidAgent.GetComponent<Mask>().MaskOn)) 
+                * Time.deltaTime / 100f).LimitToRange(0f, 1.0f);
+
+            if ((probability * 100.0f) <= rand.Next(0, 100)) Infected = true;
         }
     }
-
-    public CovidModel(GameObject AnotherAgent, GameObject ThisAgent, float weightr, float weighthealth, float weightmask, float rsphare)
-    {
-        this.AnotherAgent = AnotherAgent;
-        this.ThisAgent = ThisAgent;
-        this.weightr = weightr;
-        this.weighthealth = weighthealth;
-        this.weightmask = weightmask;
-        this.rsphare = rsphare;
-        rand = new System.Random();
-        health = ThisAgent.GetComponent<Helath>();
-    }
-
-    public bool CalculatingProbabilities()
-    {
-        new WaitForSeconds(1);
-        return (int)(Probability * 100) <= rand.Next(0, 100);
-    }
-
-    public void ChanceINfacted()
-    {
-        float BoolMask;
-        if (AnotherAgent.GetComponent<Mask>().MaskOn)
-            BoolMask = 1.0f;
-        else
-            BoolMask = 0.0f;
-
-        float r = rsphare - Mathf.Sqrt(Mathf.Pow(ThisAgent.transform.position.x - AnotherAgent.transform.position.x, 2) + Mathf.Pow(ThisAgent.transform.position.y - AnotherAgent.transform.position.y, 2) + Mathf.Pow(ThisAgent.transform.position.z - AnotherAgent.transform.position.z, 2));
-        Probability += (r * weightr + (1 - health.Value) * weighthealth - 0.5f * weightmask * BoolMask) * Time.deltaTime;
-    }
-
 }

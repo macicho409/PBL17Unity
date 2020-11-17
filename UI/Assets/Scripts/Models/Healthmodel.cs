@@ -5,14 +5,11 @@ using UnityEngine;
 
 namespace Assets.Scripts.Models
 {
-    public class Healthmodel
+    public class HealthModel
     {
         private float _health;
 
-        public float Health { get { return _health; } }
-
-
-
+        public float Health { get { return _health; }  set { _health = value; } }
     }
 }
 

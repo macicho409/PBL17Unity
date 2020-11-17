@@ -1,34 +1,37 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class Covid : MonoBehaviour
 {
-    private CovidModel covid;
-    public bool Infacted;
+    public CovidModel CovidInfection;
+    public bool Infected;
 
-    private int LenghtPreviosly;
     void Start()
     {
-        LenghtPreviosly = 0;
+        CovidInfection = new CovidModel(this.gameObject, 0.1f, 0.1f, 0.1f, 4)
+        {
+            Infected = Infected
+        };
     }
 
-    
     void Update()
     {
-        
+        DetectCollisions();
     }
 
-    private void Colision()
+    private void DetectCollisions()
     {
-        Collider[] hitColliders = Physics.OverlapSphere(this.transform.position, 4.0f,256);
+        Collider[] hitColliders = Physics.OverlapSphere(this.transform.position, 4.0f, 256);
+        List<Covid> covids = new List<Covid>();
+
         foreach (var hitCollider in hitColliders)
         {
-            if((hitCollider.name != this.name) && hitCollider.transform.GetComponent<Covid>().Infacted && LenghtPreviosly != hitColliders.Length)
-            {
-                covid = new CovidModel(hitCollider.gameObject, this.gameObject, 0.01f, 0.01f, 0.01f, 4.0f);
-                LenghtPreviosly = hitColliders.Length;
-            }
+            var differentAgent = hitCollider.transform.GetComponent<Covid>();
+
+            if ((hitCollider.name != this.name) && differentAgent.CovidInfection.Infected)
+                covids.Add(differentAgent);
         }
+
+        this.CovidInfection.InvokeCovidCollision(covids);
     }
 }
