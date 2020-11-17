@@ -5,7 +5,6 @@ using UnityEngine;
 public class CovidModel : MonoBehaviour
 {
     // Start is called before the first frame update
-    public bool Infected { get; set; }
 
     public GameObject AnotherAgent;
     public GameObject ThisAgent;
@@ -17,6 +16,7 @@ public class CovidModel : MonoBehaviour
     private float weightmask;
     private float rsphare;
     private Helath health;
+
 
     private float _probability;
     public float Probability { 
@@ -44,24 +44,22 @@ public class CovidModel : MonoBehaviour
         health = ThisAgent.GetComponent<Helath>();
     }
 
-    private bool CalculatingProbabilities()
+    public bool CalculatingProbabilities()
     {
-        return (int)(Probability*100) <= rand.Next(0, 100);
+        new WaitForSeconds(1);
+        return (int)(Probability * 100) <= rand.Next(0, 100);
     }
 
-    void ChanceINfacted()
+    public void ChanceINfacted()
     {
         float BoolMask;
-        if (AnotherAgent.GetComponent<Mask>().BoolMask)
+        if (AnotherAgent.GetComponent<Mask>().MaskOn)
             BoolMask = 1.0f;
         else
             BoolMask = 0.0f;
 
         float r = rsphare - Mathf.Sqrt(Mathf.Pow(ThisAgent.transform.position.x - AnotherAgent.transform.position.x, 2) + Mathf.Pow(ThisAgent.transform.position.y - AnotherAgent.transform.position.y, 2) + Mathf.Pow(ThisAgent.transform.position.z - AnotherAgent.transform.position.z, 2));
-        Probability = Probability + (r*weightr + (1-health.Value)*weighthealth - 0.5f* weightmask* BoolMask) * Time.deltaTime;
-
-
-        // Zrobic warunek w ktorym co sekunde zostaje przeliczone prawdopodobiienstwo zakazenia
+        Probability += (r * weightr + (1 - health.Value) * weighthealth - 0.5f * weightmask * BoolMask) * Time.deltaTime;
     }
 
 }

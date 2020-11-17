@@ -4,16 +4,21 @@ using UnityEngine;
 
 public class Mask : MonoBehaviour
 {
-    public bool BoolMask;
+    public bool MaskOn;
+
+    public Mask()
+    {
+        MaskOn = false;
+    }
 
 
 
     // The concept is to put on a physical mask
-    void PutTakeMask()
+    public void PutOnTakeOffMask()
     {
-        if (BoolMask)
-            BoolMask = false;
+        if (MaskOn)
+            MaskOn = false;
         else
-            BoolMask = true;
+            MaskOn = true;
     }
 }
