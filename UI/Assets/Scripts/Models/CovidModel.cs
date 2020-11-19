@@ -1,15 +1,18 @@
 ﻿using Assets.Scripts.ExtensionMethods;
 using System;
 using System.Collections.Generic;
+using System.Collections;
 using UnityEngine;
 
-public class CovidModel
+public class CovidModel : MonoBehaviour
 {
-    public bool Infected;
+    public bool Infected = false;
 
     private readonly GameObject thisAgent;
 
     private readonly System.Random rand;
+
+    private double SampleTime = 0;
 
     private readonly float distanceWeigth;
     private readonly float healthWeigth;
@@ -27,8 +30,11 @@ public class CovidModel
         rand = new System.Random();
     }
 
+
+
     public void InvokeCovidCollision(List<Covid> covidAgents)
     {
+
         foreach(var covidAgent in covidAgents)
         {
             var health = thisAgent.GetComponent<Helath>();
@@ -41,10 +47,22 @@ public class CovidModel
             var probability = 
                 ((r * distanceWeigth 
                 + (1.0f - health.Value) * healthWeigth 
-                - 0.5f * maskWeigth * (float) Convert.ToDouble(covidAgent.GetComponent<Mask>().MaskOn)) 
-                * Time.deltaTime / 100f).LimitToRange(0f, 1.0f);
+                -  maskWeigth * (float) Convert.ToDouble(covidAgent.GetComponent<Mask>().MaskOn))).LimitToRange(0f, 1.0f);
 
-            if ((probability * 100.0f) <= rand.Next(0, 100)) Infected = true;
+            if((SampleTime += Time.deltaTime) >= 3)
+            {
+                if ((int)(probability * 100.0f) >= rand.Next(0, 100)) Infected = true;
+                SampleTime = 0;
+            }       
         }
+
+        
+
     }
+
+
+
+
+
 }
+

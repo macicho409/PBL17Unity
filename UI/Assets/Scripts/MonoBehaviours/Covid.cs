@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections;
 using UnityEngine;
 
 public class Covid : MonoBehaviour
@@ -8,7 +9,7 @@ public class Covid : MonoBehaviour
 
     void Start()
     {
-        CovidInfection = new CovidModel(this.gameObject, 0.1f, 0.1f, 0.1f, 4)
+        CovidInfection = new CovidModel(this.gameObject, 0.3f, 0.5f, 0.2f, 4)
         {
             Infected = Infected
         };
@@ -24,14 +25,21 @@ public class Covid : MonoBehaviour
         Collider[] hitColliders = Physics.OverlapSphere(this.transform.position, 4.0f, 256);
         List<Covid> covids = new List<Covid>();
 
-        foreach (var hitCollider in hitColliders)
+
+        if(!this.Infected)
         {
-            var differentAgent = hitCollider.transform.GetComponent<Covid>();
+            foreach (var hitCollider in hitColliders)
+            {
+                var differentAgent = hitCollider.transform.GetComponent<Covid>();
 
-            if ((hitCollider.name != this.name) && differentAgent.CovidInfection.Infected)
-                covids.Add(differentAgent);
+                if ((hitCollider.name != this.name) && differentAgent.CovidInfection.Infected)
+                    covids.Add(differentAgent);
+            }
+
+            this.CovidInfection.InvokeCovidCollision(covids);
         }
-
-        this.CovidInfection.InvokeCovidCollision(covids);
+        this.Infected = CovidInfection.Infected;
     }
+
+
 }

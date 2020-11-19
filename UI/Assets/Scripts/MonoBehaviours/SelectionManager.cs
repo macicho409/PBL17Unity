@@ -1,4 +1,4 @@
-﻿using System.Collections;
+﻿
 using System.Collections.Generic;
 using UnityEngine;
 using Assets.Scripts.Models;
@@ -14,8 +14,11 @@ public class SelectionManager : MonoBehaviour
 
     private TextMeshProUGUI charackterName;
 
+    public Image covidImage;
+
     private PhysiologicalModel characterPhysiologicalModel;
     private Helath characterHealth;
+
 
     private NeedSlider foodSlider;
     private NeedSlider waterSlider;
@@ -36,6 +39,7 @@ public class SelectionManager : MonoBehaviour
         healthSlider = new NeedSlider(GameObject.Find(SliderEnum.SliderHealth.ToString()).GetComponent<Slider>());
 
         charackterName = GameObject.Find("CharacterName").GetComponent<TextMeshProUGUI>();
+
     }
 
     void Update()
@@ -50,6 +54,8 @@ public class SelectionManager : MonoBehaviour
         if (characterHealth != null)
             UpdateHealthDisplay();
 
+        UpdateImageCovid();
+
     }
 
     private void GetNeeds(RaycastHit hitInfo)
@@ -57,6 +63,7 @@ public class SelectionManager : MonoBehaviour
         characterPhysiologicalModel = hitInfo.transform.GetComponent<PhysiologicalModel>();
         characterHealth = hitInfo.transform.GetComponent<Helath>();
         charackterName.text = hitInfo.transform.name;
+        
     }
 
     private void UpdateNeedsDisplay()
@@ -66,10 +73,23 @@ public class SelectionManager : MonoBehaviour
         dreamSlider.Value = characterPhysiologicalModel.DreamNeed.Value;
         sexSlider.Value = characterPhysiologicalModel.SexNeed.Value;
         toiletSlider.Value = characterPhysiologicalModel.ToiletNeed.Value;
+        
     }
 
     private void UpdateHealthDisplay()
     {
         healthSlider.Value = characterHealth.Value;
+    }
+
+    private void UpdateImageCovid()
+    {
+        try
+        {
+            if (hitInfo.transform.GetComponent<Covid>().CovidInfection.Infected)
+                covidImage.color = new Color(0.9f, 0.9f, 0.9f);
+            else
+                covidImage.color = new Color(0.6f, 0.6f, 0.6f);
+        }
+        catch { }
     }
 }
