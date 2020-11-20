@@ -78,7 +78,6 @@ namespace UnityStandardAssets.Characters.ThirdPerson
             }
             m_Character.gowno();
             agent.SetDestination(target.position);
-            m_Character.gowno();
             //m_Character.Move(new Vector3(0,0,1), crouch, m_Jump);
 #if !MOBILE_INPUT
             // walk speed multiplier
