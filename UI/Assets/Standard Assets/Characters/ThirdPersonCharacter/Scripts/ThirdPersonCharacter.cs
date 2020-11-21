@@ -221,10 +221,10 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 				m_Animator.applyRootMotion = false;
 			}
 		}
-		public void gowno()
+		public void ChangeAnimatorState(float moveSpeed)
         {
 			//Debug.Log(m_Animator.GetCurrentAnimatorStateInfo(0).normalizedTime);
-			m_Animator.SetFloat("Forward", 0.4f, 0.1f, Time.deltaTime);
+			m_Animator.SetFloat("Forward", moveSpeed, 0.0f, Time.deltaTime);
 			//m_Animator.speed = 1;
 			//m_Animator.applyRootMotion = true;
 		}

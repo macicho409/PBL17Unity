@@ -21,6 +21,9 @@ namespace UnityStandardAssets.Characters.ThirdPerson
         private float h = 0;
         private float v = 0;
         private int counter = 0;
+        private List<Vector3> position = new List<Vector3>();
+        private float timeSinceUpdate = 0;
+        private bool simStart = true;
 
         private void Start()
         {
@@ -39,6 +42,14 @@ namespace UnityStandardAssets.Characters.ThirdPerson
             // get the third person character ( this should never be null due to require component )
             agent = GetComponent<NavMeshAgent>();
             m_Character = GetComponent<ThirdPersonCharacter>();
+            Debug.Log("Traverse link:" + agent.autoTraverseOffMeshLink);
+            position.Add(new Vector3(55.47f, 226.57f, -168.09f));
+            position.Add(new Vector3(69.16f, 225.78f, -249.51f));
+            position.Add(new Vector3(170.68f, 224.97f, -121.9f));
+            position.Add(new Vector3(196.18f, 222.72f, -107.99f));
+            timeSinceUpdate = Time.time;
+
+
         }
 
 
@@ -54,6 +65,13 @@ namespace UnityStandardAssets.Characters.ThirdPerson
         // Fixed update is called in sync with physics
         private void FixedUpdate()
         {
+            if (simStart)
+            {
+                agent.SetDestination(position[0]);
+                m_Character.ChangeAnimatorState(0.4f);
+                Debug.Log(agent.remainingDistance.ToString());
+                simStart = false;
+            }
             // read inputs
             if (counter % 100 == 0)
             {
@@ -76,8 +94,21 @@ namespace UnityStandardAssets.Characters.ThirdPerson
                 //m_Move = v*Vector3.forward + h*Vector3.right;
                 
             }
-            m_Character.gowno();
-            agent.SetDestination(target.position);
+            if (agent.remainingDistance < 0.001f && Time.time - timeSinceUpdate > 1)
+            {
+                Debug.Log("First if");
+                timeSinceUpdate = Time.time;
+                m_Character.ChangeAnimatorState(0.0f);
+                position.RemoveAt(0);
+                agent.SetDestination(position[0]);
+                agent.isStopped = true;
+            }
+            if (Time.time - timeSinceUpdate > 5 && agent.isStopped == true)
+            {
+                Debug.Log("Second if");
+                agent.isStopped = false;
+                m_Character.ChangeAnimatorState(0.4f);
+            }
             //m_Character.Move(new Vector3(0,0,1), crouch, m_Jump);
 #if !MOBILE_INPUT
             // walk speed multiplier
