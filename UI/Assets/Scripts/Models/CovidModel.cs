@@ -8,6 +8,8 @@ public class CovidModel : MonoBehaviour
 {
     public bool Infected = false;
 
+    public List<bool> rangeOfInfaccted;
+
     private readonly GameObject thisAgent;
 
     private readonly System.Random rand;
@@ -28,6 +30,11 @@ public class CovidModel : MonoBehaviour
         this.sphereRadius = sphereRadius;
 
         rand = new System.Random();
+
+        rangeOfInfaccted = new List<bool>();
+        rangeOfInfaccted.Add(false);
+        rangeOfInfaccted.Add(false);
+        rangeOfInfaccted.Add(false);
     }
 
 
@@ -55,12 +62,20 @@ public class CovidModel : MonoBehaviour
                 SampleTime = 0;
             }       
         }
-
-        
-
     }
 
-
+    public void InovkeCovidInfaction()
+    {
+        if(Infected && !rangeOfInfaccted[0] && !rangeOfInfaccted[1] && !rangeOfInfaccted[2])
+        {
+            if (33 >= rand.Next(0, 100))
+                rangeOfInfaccted[0] = true;
+            else if(33< rand.Next(0, 100)  && rand.Next(0, 100) >= 66)
+                rangeOfInfaccted[1] = true;
+            else
+                rangeOfInfaccted[2] = true;
+        }
+    }
 
 
 
