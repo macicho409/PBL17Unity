@@ -45,9 +45,8 @@ namespace UnityStandardAssets.Characters.ThirdPerson
             Debug.Log("Traverse link:" + agent.autoTraverseOffMeshLink);
             //TODO: change position to aim positions on new map
             position.Add(new Vector3(139.92f, 1.25f, -157.4f));
-            position.Add(new Vector3(69.16f, 225.78f, -249.51f));
-            position.Add(new Vector3(170.68f, 224.97f, -121.9f));
-            position.Add(new Vector3(196.18f, 222.72f, -107.99f));
+            position.Add(new Vector3(47.26f, 1.25f, -160.67f));
+            position.Add(new Vector3(169.22f, 1.25f, -126.51f));
             timeSinceUpdate = Time.time;
 
 
