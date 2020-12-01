@@ -115,7 +115,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 		}
 
 
-		void UpdateAnimator(Vector3 move)
+		public void UpdateAnimator(Vector3 move)
 		{
 			// update the animator parameters
 			m_Animator.SetFloat("Forward", m_ForwardAmount, 0.1f, Time.deltaTime);
@@ -199,7 +199,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 		}
 
 
-		void CheckGroundStatus()
+		public void CheckGroundStatus()
 		{
 			RaycastHit hitInfo;
 #if UNITY_EDITOR
@@ -220,6 +220,13 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 				m_GroundNormal = Vector3.up;
 				m_Animator.applyRootMotion = false;
 			}
+		}
+		public void ChangeAnimatorState(float moveSpeed)
+        {
+			//Debug.Log(m_Animator.GetCurrentAnimatorStateInfo(0).normalizedTime);
+			m_Animator.SetFloat("Forward", moveSpeed, 0.0f, Time.deltaTime);
+			//m_Animator.speed = 1;
+			//m_Animator.applyRootMotion = true;
 		}
 	}
 }
