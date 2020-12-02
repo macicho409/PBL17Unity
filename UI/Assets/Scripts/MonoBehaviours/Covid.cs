@@ -9,10 +9,7 @@ public class Covid : MonoBehaviour
 
     void Start()
     {
-        CovidInfection = new CovidModel(this.gameObject, 0.3f, 0.5f, 0.2f, 4)
-        {
-            Infected = Infected
-        };
+        CovidInfection = new CovidModel(this.gameObject, 0.3f, 0.5f, 0.2f, 4, Infected);
     }
 
     void Update()
@@ -24,7 +21,6 @@ public class Covid : MonoBehaviour
     {
         Collider[] hitColliders = Physics.OverlapSphere(this.transform.position, 4.0f, 256);
         List<Covid> covids = new List<Covid>();
-
 
         if(!this.Infected)
         {
@@ -40,6 +36,5 @@ public class Covid : MonoBehaviour
         }
 
         this.Infected = CovidInfection.Infected;
-        this.CovidInfection.InovkeCovidInfaction();
     }
 }

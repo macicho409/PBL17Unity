@@ -13,16 +13,25 @@ public class PhysiologicalModel : MonoBehaviour
 {
     #region [vars]
 
+    public float Health
+    { 
+        get 
+        { 
+            return FoodNeed.Value * 0.3f + 
+                WaterNeed.Value * 0.3f + 
+                DreamNeed.Value * 0.15f + 
+                ToiletNeed.Value * 0.15f + 
+                SexNeed.Value * 0.1f; 
+        } 
+    }
+
     public Need FoodNeed { get; set; }
     public Need WaterNeed { get; set; }
     public Need DreamNeed { get; set; }
     public Need SexNeed { get; set; }
     public Need ToiletNeed { get; set; }
 
-    private Vector3 FirstPosition;
-
- 
-
+    private Vector3 PreviousPosition;
 
     #endregion
 
@@ -79,8 +88,7 @@ public class PhysiologicalModel : MonoBehaviour
             value - timeWeight * (float)Math.Sqrt(value) * time
         };
 
-        FirstPosition = this.transform.position;
-
+        PreviousPosition = this.transform.position;
     }
 
     void Update()
@@ -89,8 +97,8 @@ public class PhysiologicalModel : MonoBehaviour
         UpdateNeed(FoodNeed, action);
         UpdateNeed(WaterNeed, action);
         UpdateNeed(DreamNeed, action);
-        UpdateNeed(SexNeed,action);
-        UpdateNeed(ToiletNeed,action);
+        UpdateNeed(SexNeed, action);
+        UpdateNeed(ToiletNeed, action);
     }
 
     private void UpdateNeed(Need need, float action)
@@ -100,12 +108,12 @@ public class PhysiologicalModel : MonoBehaviour
 
     private float UpdateAction()
     {
-        Vector3 SecondPosition = this.transform.position;
+        Vector3 CurrentPosition = this.transform.position;
 
-        float action = 0.1f*Mathf.Sqrt(Mathf.Pow(SecondPosition.x - FirstPosition.x, 2)
-                                + Mathf.Pow(SecondPosition.y - FirstPosition.y, 2)
-                                + Mathf.Pow(SecondPosition.z - FirstPosition.z, 2)) / Time.deltaTime;
-        FirstPosition = SecondPosition;
+        float action = 0.1f*Mathf.Sqrt(Mathf.Pow(CurrentPosition.x - PreviousPosition.x, 2)
+                                + Mathf.Pow(CurrentPosition.y - PreviousPosition.y, 2)
+                                + Mathf.Pow(CurrentPosition.z - PreviousPosition.z, 2)) / Time.deltaTime;
+        PreviousPosition = CurrentPosition;
         return action;
     }
 }

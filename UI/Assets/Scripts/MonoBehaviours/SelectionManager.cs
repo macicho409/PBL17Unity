@@ -10,6 +10,7 @@ using TMPro;
 public class SelectionManager : MonoBehaviour
 {
     #region [vars]
+
     RaycastHit hitInfo = new RaycastHit();
 
     private TextMeshProUGUI charackterName;
@@ -17,8 +18,6 @@ public class SelectionManager : MonoBehaviour
     public Image covidImage;
 
     private PhysiologicalModel characterPhysiologicalModel;
-    private Helath characterHealth;
-
 
     private NeedSlider foodSlider;
     private NeedSlider waterSlider;
@@ -39,7 +38,6 @@ public class SelectionManager : MonoBehaviour
         healthSlider = new NeedSlider(GameObject.Find(SliderEnum.SliderHealth.ToString()).GetComponent<Slider>());
 
         charackterName = GameObject.Find("CharacterName").GetComponent<TextMeshProUGUI>();
-
     }
 
     void Update()
@@ -51,19 +49,13 @@ public class SelectionManager : MonoBehaviour
         if (characterPhysiologicalModel != null) 
             UpdateNeedsDisplay();
 
-        if (characterHealth != null)
-            UpdateHealthDisplay();
-
         UpdateImageCovid();
-
     }
 
     private void GetNeeds(RaycastHit hitInfo)
     {
         characterPhysiologicalModel = hitInfo.transform.GetComponent<PhysiologicalModel>();
-        characterHealth = hitInfo.transform.GetComponent<Helath>();
         charackterName.text = hitInfo.transform.name;
-        
     }
 
     private void UpdateNeedsDisplay()
@@ -73,12 +65,9 @@ public class SelectionManager : MonoBehaviour
         dreamSlider.Value = characterPhysiologicalModel.DreamNeed.Value;
         sexSlider.Value = characterPhysiologicalModel.SexNeed.Value;
         toiletSlider.Value = characterPhysiologicalModel.ToiletNeed.Value;
+        healthSlider.Value = characterPhysiologicalModel.Health;
     }
 
-    private void UpdateHealthDisplay()
-    {
-        healthSlider.Value = characterHealth.Value;
-    }
 
     private void UpdateImageCovid()
     {

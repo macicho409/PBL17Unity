@@ -11,8 +11,6 @@ public class Mask : MonoBehaviour
         MaskOn = false;
     }
 
-
-
     // The concept is to put on a physical mask
     public void PutOnTakeOffMask()
     {
