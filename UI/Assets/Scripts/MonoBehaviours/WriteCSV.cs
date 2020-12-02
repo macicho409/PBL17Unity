@@ -8,7 +8,6 @@ using System;
 
 public class WriteCSV : MonoBehaviour
 {
-
     private double time;
     private GameObject[] agents;
     void Start()

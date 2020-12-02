@@ -91,8 +91,6 @@ public class PhysiologicalModel : MonoBehaviour
         UpdateNeed(DreamNeed, action);
         UpdateNeed(SexNeed,action);
         UpdateNeed(ToiletNeed,action);
-        
-
     }
 
     private void UpdateNeed(Need need, float action)

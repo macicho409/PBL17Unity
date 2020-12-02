@@ -73,7 +73,6 @@ public class SelectionManager : MonoBehaviour
         dreamSlider.Value = characterPhysiologicalModel.DreamNeed.Value;
         sexSlider.Value = characterPhysiologicalModel.SexNeed.Value;
         toiletSlider.Value = characterPhysiologicalModel.ToiletNeed.Value;
-        
     }
 
     private void UpdateHealthDisplay()

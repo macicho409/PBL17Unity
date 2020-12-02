@@ -1080,7 +1080,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b718d8174ccd8d4380acb0608515bb3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  light: {fileID: 818822809}
+  Light: {fileID: 818822809}
 --- !u!114 &565089520
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1093,7 +1093,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d66e8d45d79d7e148be74af8b20a8001, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CovidInfection: {fileID: 0}
   Infected: 0
 --- !u!114 &565089521
 MonoBehaviour:
@@ -1775,7 +1774,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b718d8174ccd8d4380acb0608515bb3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  light: {fileID: 103706390}
+  Light: {fileID: 103706390}
 --- !u!114 &660664998
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1788,7 +1787,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d66e8d45d79d7e148be74af8b20a8001, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CovidInfection: {fileID: 0}
   Infected: 0
 --- !u!114 &660664999
 MonoBehaviour:
@@ -2998,7 +2996,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d66e8d45d79d7e148be74af8b20a8001, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CovidInfection: {fileID: 0}
   Infected: 0
 --- !u!114 &1161988856
 MonoBehaviour:
@@ -3145,7 +3142,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b718d8174ccd8d4380acb0608515bb3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  light: {fileID: 645805204}
+  Light: {fileID: 645805204}
 --- !u!1 &1450969699
 GameObject:
   m_ObjectHideFlags: 0
@@ -3379,7 +3376,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b718d8174ccd8d4380acb0608515bb3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  light: {fileID: 1034605013}
+  Light: {fileID: 1034605013}
 --- !u!114 &1660823674
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3392,7 +3389,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d66e8d45d79d7e148be74af8b20a8001, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CovidInfection: {fileID: 0}
   Infected: 0
 --- !u!114 &1660823675
 MonoBehaviour:
@@ -4401,7 +4397,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b718d8174ccd8d4380acb0608515bb3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  light: {fileID: 2140209734}
+  Light: {fileID: 2140209734}
 --- !u!114 &1918299225
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4414,7 +4410,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d66e8d45d79d7e148be74af8b20a8001, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CovidInfection: {fileID: 0}
   Infected: 1
 --- !u!114 &1918299226
 MonoBehaviour:

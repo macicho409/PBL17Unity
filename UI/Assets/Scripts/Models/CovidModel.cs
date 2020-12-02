@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Collections;
 using UnityEngine;
 
-public class CovidModel : MonoBehaviour
+public class CovidModel
 {
     public bool Infected = false;
 
@@ -31,17 +31,16 @@ public class CovidModel : MonoBehaviour
 
         rand = new System.Random();
 
-        rangeOfInfaccted = new List<bool>();
-        rangeOfInfaccted.Add(false);
-        rangeOfInfaccted.Add(false);
-        rangeOfInfaccted.Add(false);
+        rangeOfInfaccted = new List<bool>
+        {
+            false,
+            false,
+            false
+        };
     }
-
-
 
     public void InvokeCovidCollision(List<Covid> covidAgents)
     {
-
         foreach(var covidAgent in covidAgents)
         {
             var health = thisAgent.GetComponent<Helath>();
@@ -70,14 +69,11 @@ public class CovidModel : MonoBehaviour
         {
             if (33 >= rand.Next(0, 100))
                 rangeOfInfaccted[0] = true;
-            else if(33< rand.Next(0, 100)  && rand.Next(0, 100) >= 66)
+            else if(33 < rand.Next(0, 100)  && rand.Next(0, 100) >= 66)
                 rangeOfInfaccted[1] = true;
             else
                 rangeOfInfaccted[2] = true;
         }
     }
-
-
-
 }
 

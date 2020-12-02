@@ -38,9 +38,8 @@ public class Covid : MonoBehaviour
 
             this.CovidInfection.InvokeCovidCollision(covids);
         }
+
         this.Infected = CovidInfection.Infected;
         this.CovidInfection.InovkeCovidInfaction();
     }
-    
-
 }
