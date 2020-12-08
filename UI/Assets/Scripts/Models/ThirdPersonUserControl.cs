@@ -5,6 +5,7 @@ using System.Collections.Specialized;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityStandardAssets.CrossPlatformInput;
+using Assets.ThirdPerson;
 
 namespace UnityStandardAssets.Characters.ThirdPerson
 {
