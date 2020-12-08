@@ -14,6 +14,8 @@ namespace Assets.ThirdPerson
         private ThirdPersonCharacter m_Character; // A reference to the ThirdPersonCharacter on the object
         private Transform m_Cam;                  // A reference to the main camera in the scenes transform
         public Transform target;
+        //private GameObject PhysModel;
+        private PhysiologicalModel dupa;
         NavMeshAgent agent;
         private Vector3 m_CamForward;             // The current forward direction of the camera
         private Vector3 m_Move;
@@ -42,11 +44,12 @@ namespace Assets.ThirdPerson
             // get the third person character ( this should never be null due to require component )
             agent = GetComponent<NavMeshAgent>();
             m_Character = GetComponent<ThirdPersonCharacter>();
+            dupa = GetComponent<PhysiologicalModel>();
+
             //Debug.Log("Traverse link:" + agent.autoTraverseOffMeshLink);
             //TODO: change position to aim positions on new map
-            position.Add(new Vector3(139.92f, 1.25f, -157.4f));
             position.Add(new Vector3(47.26f, 1.25f, -160.67f));
-            position.Add(new Vector3(169.22f, 1.25f, -126.51f));
+            //position.Add(new Vector3(169.22f, 1.25f, -126.51f));
             timeSinceUpdate = Time.time;
 
 
@@ -65,6 +68,10 @@ namespace Assets.ThirdPerson
         // Fixed update is called in sync with physics
         private void FixedUpdate()
         {
+            if (dupa.PurposeOfLife == "Food")
+            {
+                position.Add(new Vector3(139.92f, 1.25f, -157.4f));
+            }
             if (simStart)
             {
                 agent.SetDestination(position[0]);
