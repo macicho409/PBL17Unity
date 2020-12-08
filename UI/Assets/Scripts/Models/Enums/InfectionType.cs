@@ -6,13 +6,11 @@ using System.Threading.Tasks;
 
 namespace Assets.Scripts.Models.Enums
 {
-    enum SliderEnum
+    public enum InfectionType
     {
-        SliderFood,
-        SliderWater,
-        SliderDream,
-        SliderSex,
-        SliderToilet,
-        SliderHealth
+        Healthy,
+        InfectedWithSymptoms,
+        InfectedWithoutSymptoms,
+        SeriouslyIll
     }
 }

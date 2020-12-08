@@ -1,4 +1,4 @@
-﻿using System.Collections;
+﻿
 using System.Collections.Generic;
 using UnityEngine;
 using Assets.Scripts.Models;
@@ -10,9 +10,12 @@ using TMPro;
 public class SelectionManager : MonoBehaviour
 {
     #region [vars]
+
     RaycastHit hitInfo = new RaycastHit();
 
     private TextMeshProUGUI charackterName;
+
+    public Image covidImage;
 
     private PhysiologicalModel characterPhysiologicalModel;
 
@@ -21,6 +24,8 @@ public class SelectionManager : MonoBehaviour
     private NeedSlider dreamSlider;
     private NeedSlider sexSlider;
     private NeedSlider toiletSlider;
+    private NeedSlider healthSlider;
+
     #endregion
 
     void Start()
@@ -30,6 +35,7 @@ public class SelectionManager : MonoBehaviour
         dreamSlider = new NeedSlider(GameObject.Find(SliderEnum.SliderDream.ToString()).GetComponent<Slider>());
         sexSlider = new NeedSlider(GameObject.Find(SliderEnum.SliderSex.ToString()).GetComponent<Slider>());
         toiletSlider = new NeedSlider(GameObject.Find(SliderEnum.SliderToilet.ToString()).GetComponent<Slider>());
+        healthSlider = new NeedSlider(GameObject.Find(SliderEnum.SliderHealth.ToString()).GetComponent<Slider>());
 
         charackterName = GameObject.Find("CharacterName").GetComponent<TextMeshProUGUI>();
     }
@@ -42,6 +48,8 @@ public class SelectionManager : MonoBehaviour
 
         if (characterPhysiologicalModel != null) 
             UpdateNeedsDisplay();
+
+        UpdateImageCovid();
     }
 
     private void GetNeeds(RaycastHit hitInfo)
@@ -57,5 +65,19 @@ public class SelectionManager : MonoBehaviour
         dreamSlider.Value = characterPhysiologicalModel.DreamNeed.Value;
         sexSlider.Value = characterPhysiologicalModel.SexNeed.Value;
         toiletSlider.Value = characterPhysiologicalModel.ToiletNeed.Value;
+        healthSlider.Value = characterPhysiologicalModel.Health;
+    }
+
+
+    private void UpdateImageCovid()
+    {
+        try
+        {
+            if (hitInfo.transform.GetComponent<Covid>().CovidInfection.Infected)
+                covidImage.color = new Color(0.9f, 0.9f, 0.9f);
+            else
+                covidImage.color = new Color(0.6f, 0.6f, 0.6f);
+        }
+        catch { }
     }
 }

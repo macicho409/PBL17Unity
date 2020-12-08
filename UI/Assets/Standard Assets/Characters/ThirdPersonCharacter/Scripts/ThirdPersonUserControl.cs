@@ -42,7 +42,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
             // get the third person character ( this should never be null due to require component )
             agent = GetComponent<NavMeshAgent>();
             m_Character = GetComponent<ThirdPersonCharacter>();
-            Debug.Log("Traverse link:" + agent.autoTraverseOffMeshLink);
+            //Debug.Log("Traverse link:" + agent.autoTraverseOffMeshLink);
             //TODO: change position to aim positions on new map
             position.Add(new Vector3(139.92f, 1.25f, -157.4f));
             position.Add(new Vector3(47.26f, 1.25f, -160.67f));
@@ -69,7 +69,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
             {
                 agent.SetDestination(position[0]);
                 m_Character.ChangeAnimatorState(0.4f);
-                Debug.Log(agent.remainingDistance.ToString());
+                //Debug.Log(agent.remainingDistance.ToString());
                 simStart = false;
             }
             // read inputs
