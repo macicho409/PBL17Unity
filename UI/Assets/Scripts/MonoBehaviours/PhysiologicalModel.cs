@@ -25,6 +25,8 @@ public class PhysiologicalModel : MonoBehaviour
         } 
     }
 
+    public string PurposeOfLife { get; set; }
+    private readonly List<string> ListOfNeeds = new List<string> { "Food", "Water", "Dream", "Sex", "Toilet" };
     public Need FoodNeed { get; set; }
     public Need WaterNeed { get; set; }
     public Need DreamNeed { get; set; }
@@ -87,6 +89,8 @@ public class PhysiologicalModel : MonoBehaviour
             OnUpdateFunc = (float value, float actionCost, float timeWeight, float action, float time) =>
             value - timeWeight * (float)Math.Sqrt(value) * time
         };
+
+        PurposeOfLife = ListOfNeeds[0];
 
         PreviousPosition = this.transform.position;
     }
