@@ -25,8 +25,8 @@ public class PhysiologicalModel : MonoBehaviour
         } 
     }
 
-    public string PurposeOfLife { get; set; }
-    private readonly List<string> ListOfNeeds = new List<string> { "Food", "Water", "Dream", "Sex", "Toilet" };
+    public enum ListOfNeeds { Food, Water, Dream, Sex, Toilet };
+    public ListOfNeeds PurposeOfLife { get; set; }
     public Need FoodNeed { get; set; }
     public Need WaterNeed { get; set; }
     public Need DreamNeed { get; set; }
@@ -34,6 +34,7 @@ public class PhysiologicalModel : MonoBehaviour
     public Need ToiletNeed { get; set; }
 
     private Vector3 PreviousPosition;
+    private int counter = 0;
 
     #endregion
 
@@ -90,13 +91,20 @@ public class PhysiologicalModel : MonoBehaviour
             value - timeWeight * (float)Math.Sqrt(value) * time
         };
 
-        PurposeOfLife = ListOfNeeds[0];
+        PurposeOfLife = ListOfNeeds.Food;
 
         PreviousPosition = this.transform.position;
     }
 
     void Update()
     {
+        counter++;
+        if(counter == 1500)
+        {
+            PurposeOfLife += 1;
+            counter = 0;
+        }
+
         float action = UpdateAction();
         UpdateNeed(FoodNeed, action);
         UpdateNeed(WaterNeed, action);

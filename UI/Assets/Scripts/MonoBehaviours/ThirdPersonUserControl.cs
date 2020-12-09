@@ -15,7 +15,7 @@ namespace Assets.ThirdPerson
         private Transform m_Cam;                  // A reference to the main camera in the scenes transform
         public Transform target;
         //private GameObject PhysModel;
-        private PhysiologicalModel dupa;
+        private PhysiologicalModel m_Model;
         NavMeshAgent agent;
         private Vector3 m_CamForward;             // The current forward direction of the camera
         private Vector3 m_Move;
@@ -23,7 +23,8 @@ namespace Assets.ThirdPerson
         private float h = 0;
         private float v = 0;
         private int counter = 0;
-        private List<Vector3> position = new List<Vector3>();
+        //private List<Vector3> position = new List<Vector3>();
+        private Vector3 destination;
         private float timeSinceUpdate = 0;
         private bool simStart = true;
 
@@ -44,14 +45,9 @@ namespace Assets.ThirdPerson
             // get the third person character ( this should never be null due to require component )
             agent = GetComponent<NavMeshAgent>();
             m_Character = GetComponent<ThirdPersonCharacter>();
-            dupa = GetComponent<PhysiologicalModel>();
-
-            //Debug.Log("Traverse link:" + agent.autoTraverseOffMeshLink);
-            //TODO: change position to aim positions on new map
-            position.Add(new Vector3(47.26f, 1.25f, -160.67f));
-            //position.Add(new Vector3(169.22f, 1.25f, -126.51f));
+            m_Model = GetComponent<PhysiologicalModel>();
             timeSinceUpdate = Time.time;
-
+            agent.isStopped = true;
 
         }
 
@@ -68,17 +64,8 @@ namespace Assets.ThirdPerson
         // Fixed update is called in sync with physics
         private void FixedUpdate()
         {
-            if (dupa.PurposeOfLife == "Food")
-            {
-                position.Add(new Vector3(139.92f, 1.25f, -157.4f));
-            }
-            if (simStart)
-            {
-                agent.SetDestination(position[0]);
-                m_Character.ChangeAnimatorState(0.4f);
-                //Debug.Log(agent.remainingDistance.ToString());
-                simStart = false;
-            }
+            //string dupa = m_Model.PurposeOfLife.ToString("g");
+            Debug.Log(m_Model.PurposeOfLife.ToString("g"));
             // read inputs
             if (counter % 100 == 0)
             {
@@ -106,8 +93,8 @@ namespace Assets.ThirdPerson
                 Debug.Log("First if");
                 timeSinceUpdate = Time.time;
                 m_Character.ChangeAnimatorState(0.0f);
-                position.RemoveAt(0);
-                agent.SetDestination(position[0]);
+                //position.RemoveAt(0);
+                agent.SetDestination(FindDestination());
                 agent.isStopped = true;
             }
             if (Time.time - timeSinceUpdate > 5 && agent.isStopped == true)
@@ -125,6 +112,29 @@ namespace Assets.ThirdPerson
             // pass all parameters to the character control script
             //m_Character.Move(m_Move, crouch, m_Jump);
             m_Jump = false;
+        }
+        private Vector3 FindDestination()
+        {
+            Vector3 destination = new Vector3(0f, 0f, 0f);
+            switch (m_Model.PurposeOfLife)
+            {
+                case (PhysiologicalModel.ListOfNeeds.Food):
+                    destination = new Vector3(139.92f, 1.25f, -157.4f);
+                    break;
+                case (PhysiologicalModel.ListOfNeeds.Water):
+                    destination = new Vector3(169.22f, 1.25f, -126.51f);
+                    break;
+                case (PhysiologicalModel.ListOfNeeds.Dream):
+                    destination = new Vector3(47.26f, 1.25f, -160.67f);
+                    break;
+                case (PhysiologicalModel.ListOfNeeds.Sex):
+                    destination = new Vector3(120.24f, 1.25f, -148.21f);
+                    break;
+                case (PhysiologicalModel.ListOfNeeds.Toilet):
+                    destination = new Vector3(88.4f, 1.25f, -111.24f);
+                    break;
+            }
+            return destination;
         }
     }
 }
