@@ -14,16 +14,11 @@ namespace Assets.ThirdPerson
         private ThirdPersonCharacter m_Character; // A reference to the ThirdPersonCharacter on the object
         private Transform m_Cam;                  // A reference to the main camera in the scenes transform
         public Transform target;
-        //private GameObject PhysModel;
         private PhysiologicalModel m_Model;
         NavMeshAgent agent;
         private Vector3 m_CamForward;             // The current forward direction of the camera
         private Vector3 m_Move;
-        private bool m_Jump;                      // the world-relative desired move direction, calculated from the camForward and user input.
-        private float h = 0;
-        private float v = 0;
-        private int counter = 0;
-        //private List<Vector3> position = new List<Vector3>();
+        private bool m_Jump;
         private Vector3 destination;
         private float timeSinceUpdate = 0;
         private bool simStart = true;
@@ -51,7 +46,6 @@ namespace Assets.ThirdPerson
 
         }
 
-
         private void Update()
         {
             if (!m_Jump)
@@ -64,17 +58,6 @@ namespace Assets.ThirdPerson
         // Fixed update is called in sync with physics
         private void FixedUpdate()
         {
-            //string dupa = m_Model.PurposeOfLife.ToString("g");
-            Debug.Log(m_Model.PurposeOfLife.ToString("g"));
-            // read inputs
-            if (counter % 100 == 0)
-            {
-                h = UnityEngine.Random.Range(-1.0f, 1.0f);
-                v = UnityEngine.Random.Range(-1.0f, 1.0f);
-            }
-            counter++;
-            bool crouch = Input.GetKey(KeyCode.C);
-
             // calculate move direction to pass to character
             if (m_Cam != null)
             {
@@ -82,12 +65,7 @@ namespace Assets.ThirdPerson
                 m_CamForward = Vector3.Scale(m_Cam.forward, new Vector3(1, 0, 1)).normalized;
                 //m_Move = v*m_CamForward + h*m_Cam.right;
             }
-            else
-            {
-                // we use world-relative directions in the case of no main camera
-                //m_Move = v*Vector3.forward + h*Vector3.right;
-                
-            }
+
             if (agent.remainingDistance < 0.001f && Time.time - timeSinceUpdate > 1)
             {
                 Debug.Log("First if");
@@ -103,14 +81,6 @@ namespace Assets.ThirdPerson
                 agent.isStopped = false;
                 m_Character.ChangeAnimatorState(0.4f);
             }
-            //m_Character.Move(new Vector3(0,0,1), crouch, m_Jump);
-#if !MOBILE_INPUT
-            // walk speed multiplier
-            if (Input.GetKey(KeyCode.LeftShift)) m_Move *= 0.5f;
-#endif
-
-            // pass all parameters to the character control script
-            //m_Character.Move(m_Move, crouch, m_Jump);
             m_Jump = false;
         }
         private Vector3 FindDestination()
