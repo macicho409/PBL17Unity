@@ -20,6 +20,7 @@ namespace Assets.ThirdPerson
         private Vector3 destination;
         private float timeSinceUpdate = 0;
         private const float mapHeigth = 1.25f;
+        public bool isPositionAcquired = false;
         private List<Vector3> foodSpots = new List<Vector3>() { new Vector3(139.92f, mapHeigth, -157.4f), 
                                                                 new Vector3(92.05f, mapHeigth, -203.9f), 
                                                                 new Vector3(112.5f, mapHeigth, -262.1f), 
@@ -72,12 +73,14 @@ namespace Assets.ThirdPerson
                 destination = FindDestination();
                 agent.SetDestination(destination);
                 agent.isStopped = true;
+                isPositionAcquired = true;
             }
             if (Time.time - timeSinceUpdate > 5 && agent.isStopped == true)
             {
                 Debug.Log("Moving");
                 agent.isStopped = false;
                 m_Character.ChangeAnimatorState(0.4f);
+                isPositionAcquired = false;
             }
             m_Jump = false;
         }
@@ -121,20 +124,47 @@ namespace Assets.ThirdPerson
             int minimumValueIndex=0;
             foreach (Vector3 spot in listOfSpots)
             {
-                agent.SetDestination(spot);
+                //agent.SetDestination(spot);
                 NavMeshPath path = new NavMeshPath();
-                agent.CalculatePath(spot, path);
-                if (path.status == NavMeshPathStatus.PathComplete) {
-                    distances.Add(agent.remainingDistance);
+                //agent.CalculatePath(spot, path);
+                //NavMesh.CalculatePath(agent.transform.position, spot, agent.areaMask, path);
+                Debug.Log("XXXXXXXXSpot: " + spot.ToString());
+                Debug.Log("XXXXXXXXRemaining distance: " + agent.remainingDistance.ToString());
+                if (GetPath(path, agent.transform.position, spot, agent.areaMask) == true) {
+                    distances.Add(GetPathLength(path));
                 }
                 else
                 {
                     distances.Add(340282300000000);
                 }
-                minimumValueIndex = distances.IndexOf(distances.Min());
             }
+            minimumValueIndex = distances.IndexOf(distances.Min());
             Debug.Log("Going to point: " + listOfSpots[minimumValueIndex].ToString() + "Index: " + minimumValueIndex.ToString());
             return listOfSpots[minimumValueIndex];
+        }
+
+        private bool GetPath(NavMeshPath path, Vector3 fromPos, Vector3 toPos, int passableMask)
+        {
+            path.ClearCorners();
+
+            if (NavMesh.CalculatePath(fromPos, toPos, passableMask, path) == false)
+                return false;
+
+            return true;
+        }
+        private float GetPathLength(NavMeshPath path)
+        {
+            float lng = 0.0f;
+
+            if (path.status != NavMeshPathStatus.PathInvalid)
+            {
+                for (int i = 1; i < path.corners.Length; ++i)
+                {
+                    lng += Vector3.Distance(path.corners[i - 1], path.corners[i]);
+                }
+            }
+
+            return lng;
         }
     }
 }
