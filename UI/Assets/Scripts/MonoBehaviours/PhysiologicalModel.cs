@@ -35,6 +35,7 @@ public class PhysiologicalModel : MonoBehaviour
 
     private Vector3 PreviousPosition;
     private int counter = 0;
+    private System.Random rnd = new System.Random();
 
     #endregion
 
@@ -99,9 +100,9 @@ public class PhysiologicalModel : MonoBehaviour
     void Update()
     {
         counter++;
-        if(counter == 1500)
+        if(counter == 1900)
         {
-            PurposeOfLife += 1;
+            PurposeOfLife = (ListOfNeeds)rnd.Next(5);
             counter = 0;
         }
 
