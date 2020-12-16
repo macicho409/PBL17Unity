@@ -102,12 +102,16 @@ public class PhysiologicalModel : MonoBehaviour
 
     void Update()
     {
+        /* workaround for determining purpose of life
+         * agent.isPositionAcquired can be used in fute to determine
+         * whether the need is satisfied*/
         counter++;
         if(agent.isPositionAcquired & counter > 100)
         {
             PurposeOfLife = (ListOfNeeds)rnd.Next(5);
             counter = 0;
         }
+        /*end of workaroung*/
 
         float action = UpdateAction();
         UpdateNeed(FoodNeed, action);
