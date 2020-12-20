@@ -8,6 +8,7 @@ using Assets.Scripts.Models;
 using UnityEngine.PlayerLoop;
 using UnityEngine.UI;
 using Assets.Scripts.Models.Enums;
+using Assets.ThirdPerson;
 
 public class PhysiologicalModel : MonoBehaviour
 {
@@ -25,6 +26,8 @@ public class PhysiologicalModel : MonoBehaviour
         } 
     }
 
+    public enum ListOfNeeds { Food, Water, Dream, Sex, Toilet };
+    public ListOfNeeds PurposeOfLife { get; set; }
     public Need FoodNeed { get; set; }
     public Need WaterNeed { get; set; }
     public Need DreamNeed { get; set; }
@@ -32,11 +35,15 @@ public class PhysiologicalModel : MonoBehaviour
     public Need ToiletNeed { get; set; }
 
     private Vector3 PreviousPosition;
+    private ThirdPersonUserControl agent;
+    private int counter = 0;
+    private System.Random rnd = new System.Random();
 
     #endregion
 
     void Start()
     {
+        agent = GetComponent<ThirdPersonUserControl>();
         FoodNeed = new Need
         {
             Value = 1.0f,
@@ -88,11 +95,24 @@ public class PhysiologicalModel : MonoBehaviour
             value - timeWeight * (float)Math.Sqrt(value) * time
         };
 
+        PurposeOfLife = ListOfNeeds.Food;
+
         PreviousPosition = this.transform.position;
     }
 
     void Update()
     {
+        /* workaround for determining purpose of life
+         * agent.isPositionAcquired can be used in fute to determine
+         * whether the need is satisfied*/
+        counter++;
+        if(agent.isPositionAcquired & counter > 100)
+        {
+            PurposeOfLife = (ListOfNeeds)rnd.Next(5);
+            counter = 0;
+        }
+        /*end of workaroung*/
+
         float action = UpdateAction();
         UpdateNeed(FoodNeed, action);
         UpdateNeed(WaterNeed, action);
