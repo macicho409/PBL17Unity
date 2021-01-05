@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityStandardAssets.CrossPlatformInput;
 using System.Linq;
+using Assets.Scripts.Models.Enums;
 
 namespace Assets.ThirdPerson
 {
@@ -89,27 +90,27 @@ namespace Assets.ThirdPerson
             Vector3 destination = new Vector3(0f, 0f, 0f);
             switch (m_Model.PurposeOfLife)
             {
-                case (PhysiologicalModel.ListOfNeeds.Food):
+                case (ListOfNeeds.Food):
                     Debug.Log("Looking for Food");
                     //destination = new Vector3(139.92f, 1.25f, -157.4f);
                     destination = FindClosestSpot(foodSpots);
                     break;
-                case (PhysiologicalModel.ListOfNeeds.Water):
+                case (ListOfNeeds.Water):
                     Debug.Log("Looking for Water");
                     //destination = new Vector3(169.22f, 1.25f, -126.51f);
                     destination = FindClosestSpot(waterSpots);
                     break;
-                case (PhysiologicalModel.ListOfNeeds.Dream):
+                case (ListOfNeeds.Dream):
                     Debug.Log("Looking for Dream");
                     //destination = new Vector3(47.26f, 1.25f, -160.67f);
                     destination = FindClosestSpot(dreamSpots);
                     break;
-                case (PhysiologicalModel.ListOfNeeds.Sex):
+                case (ListOfNeeds.Sex):
                     Debug.Log("Looking for Sex");
                     //destination = new Vector3(120.24f, 1.25f, -148.21f);
                     destination = FindClosestSpot(sexSpots);
                     break;
-                case (PhysiologicalModel.ListOfNeeds.Toilet):
+                case (ListOfNeeds.Toilet):
                     Debug.Log("Looking for Toilet");
                     //destination = new Vector3(88.4f, 1.25f, -111.24f);
                     destination = FindClosestSpot(toiletSpots);

@@ -9,6 +9,7 @@ using UnityEngine.PlayerLoop;
 using UnityEngine.UI;
 using Assets.Scripts.Models.Enums;
 using Assets.ThirdPerson;
+using Debug = UnityEngine.Debug;
 
 public class PhysiologicalModel : MonoBehaviour
 {
@@ -26,7 +27,6 @@ public class PhysiologicalModel : MonoBehaviour
         } 
     }
 
-    public enum ListOfNeeds { Food, Water, Dream, Sex, Toilet };
     public ListOfNeeds PurposeOfLife { get; set; }
     public Need FoodNeed { get; set; }
     public Need WaterNeed { get; set; }
@@ -106,10 +106,11 @@ public class PhysiologicalModel : MonoBehaviour
          * agent.isPositionAcquired can be used in fute to determine
          * whether the need is satisfied*/
         counter++;
-        if(agent.isPositionAcquired & counter > 100)
+        if (agent.isPositionAcquired & counter > 100)
         {
-            PurposeOfLife = (ListOfNeeds)rnd.Next(5);
+            //PurposeOfLife = (ListOfNeeds)rnd.Next(5);
             counter = 0;
+            Debug.Log(PurposeOfLife.ToString());
         }
         /*end of workaroung*/
 
