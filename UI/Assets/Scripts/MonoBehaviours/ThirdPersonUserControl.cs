@@ -21,26 +21,31 @@ namespace Assets.ThirdPerson
         private float timeSinceUpdate = 0;
         private const float mapHeigth = 1.25f;
         public bool isPositionAcquired = false;
-        private List<Vector3> foodSpots = new List<Vector3>() { new Vector3(139.92f, mapHeigth, -157.4f), 
-                                                                new Vector3(92.05f, mapHeigth, -203.9f), 
-                                                                new Vector3(112.5f, mapHeigth, -262.1f), 
-                                                                new Vector3(221f, mapHeigth, -78f) };
-        private List<Vector3> waterSpots = new List<Vector3>() { new Vector3(169.22f, mapHeigth, -126.51f), 
-                                                                 new Vector3(47.8f, mapHeigth, -161f), 
-                                                                 new Vector3(171.2f, mapHeigth, -273.6f), 
-                                                                 new Vector3(247.1f, mapHeigth, -77.4f) };
-        private List<Vector3> dreamSpots = new List<Vector3>() { new Vector3(47.26f, mapHeigth, -160.67f), 
-                                                                 new Vector3(87.8f, mapHeigth, 119.2f), 
-                                                                 new Vector3(62.5f, mapHeigth, -253.5f), 
-                                                                 new Vector3(288.88f, mapHeigth, -23.7f) };
-        private List<Vector3> sexSpots = new List<Vector3>() { new Vector3(120.24f, mapHeigth, -148.21f), 
-                                                               new Vector3(132.7f, mapHeigth, -159.3f), 
-                                                               new Vector3(6.25f, mapHeigth, -196.7f), 
-                                                               new Vector3(362.5f, mapHeigth, 19f) };
-        private List<Vector3> toiletSpots = new List<Vector3>() { new Vector3(88.4f, mapHeigth, -111.24f), 
-                                                                  new Vector3(161.1f, mapHeigth, -171.7f), 
-                                                                  new Vector3(155f, mapHeigth, -215.9f), 
-                                                                  new Vector3(355.7f, mapHeigth, 68.2f) };
+        private List<Vector3> foodSpots = new List<Vector3>() { new Vector3(116.43f, mapHeigth, -136.6f) };
+                                                                //new Vector3(139.92f, mapHeigth, -157.4f), 
+                                                                //new Vector3(92.05f, mapHeigth, -203.9f), 
+                                                                //new Vector3(112.5f, mapHeigth, -262.1f), 
+                                                                //new Vector3(221f, mapHeigth, -78f) };
+        private List<Vector3> waterSpots = new List<Vector3>() { new Vector3(109.96f, mapHeigth, -189.14f) };
+                                                                //new Vector3(169.22f, mapHeigth, -126.51f), 
+                                                                 //new Vector3(47.8f, mapHeigth, -161f), 
+                                                                 //new Vector3(171.2f, mapHeigth, -273.6f), 
+                                                                 //new Vector3(247.1f, mapHeigth, -77.4f) };
+        private List<Vector3> dreamSpots = new List<Vector3>() { new Vector3(77.88f, mapHeigth, -176.18f) };
+                                                                 //new Vector3(47.26f, mapHeigth, -160.67f), 
+                                                                 //new Vector3(87.8f, mapHeigth, 119.2f), 
+                                                                 //new Vector3(62.5f, mapHeigth, -253.5f), 
+                                                                 //new Vector3(288.88f, mapHeigth, -23.7f) };
+        private List<Vector3> sexSpots = new List<Vector3>() { new Vector3(48.91f, mapHeigth, -153.49f) };
+                                                                //new Vector3(120.24f, mapHeigth, -148.21f), 
+                                                               //new Vector3(132.7f, mapHeigth, -159.3f), 
+                                                               //new Vector3(6.25f, mapHeigth, -196.7f), 
+                                                               //new Vector3(362.5f, mapHeigth, 19f) };
+        private List<Vector3> toiletSpots = new List<Vector3>() { new Vector3(90.1f, mapHeigth, -118.2f) };
+                                                                  //new Vector3(88.4f, mapHeigth, -111.24f), 
+                                                                  //new Vector3(161.1f, mapHeigth, -171.7f), 
+                                                                  //new Vector3(155f, mapHeigth, -215.9f), 
+                                                                  //new Vector3(355.7f, mapHeigth, 68.2f) };
 
         private void Start()
         {
