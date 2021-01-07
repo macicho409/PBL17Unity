@@ -43,7 +43,7 @@ public class SelectionManager : MonoBehaviour
     void Update()
     {
         //Shot ray from center of Main Camera on Mouse click. If the ray encounters an Object with PhysiologicalModel attached to it then get PhysiologicalModel from Object 
-        if (Input.GetMouseButtonDown(0) && Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hitInfo) && hitInfo.transform.GetComponent<PhysiologicalModel>())
+        if (Input.GetMouseButtonDown(0) && Physics.Raycast(Camera.allCameras[0].ScreenPointToRay(Input.mousePosition), out hitInfo) && hitInfo.transform.GetComponent<PhysiologicalModel>())
             GetNeeds(hitInfo);
 
         if (characterPhysiologicalModel != null) 
