@@ -40,7 +40,7 @@ public class TCPServer : MonoBehaviour
 			iterator++;
 		}
 
-		tcpListenerThread = new Thread(new ThreadStart(ListenForIncommingRequests))
+		tcpListenerThread = new Thread(new ThreadStart(ListenForRequests))
         {
             IsBackground = true
         };
@@ -56,7 +56,7 @@ public class TCPServer : MonoBehaviour
 	/// <summary> 	
 	/// Runs in background TcpServerThread; Handles incomming TcpClient requests 	
 	/// </summary> 	
-	private void ListenForIncommingRequests()
+	private void ListenForRequests()
 	{
 		try
 		{		
@@ -103,15 +103,16 @@ public class TCPServer : MonoBehaviour
 			Debug.Log("Get recognized");
 
 			string msg = "";
+			IFormatProvider iFormatProvider = new System.Globalization.CultureInfo("en");
 
 			//here is possible to add more needs if needed
 			foreach (var agent in agents)
 			{
-				msg += agent.Need.FoodNeed.Value.ToString() + ","
-					+ agent.Need.WaterNeed.Value.ToString() + ","
-					+ agent.Need.DreamNeed.Value.ToString() + ","
-					+ agent.Need.SexNeed.Value.ToString() + ","
-					+ agent.Need.ToiletNeed.Value.ToString() + "\n";
+				msg += String.Format(iFormatProvider, "{0:0.#######}", agent.Need.FoodNeed.Value) + ","
+					+ String.Format(iFormatProvider, "{0:0.#######}", agent.Need.WaterNeed.Value) + ","
+					+ String.Format(iFormatProvider, "{0:0.#######}", agent.Need.DreamNeed.Value) + ","
+					+ String.Format(iFormatProvider, "{0:0.#######}", agent.Need.SexNeed.Value) + ","
+					+ String.Format(iFormatProvider, "{0:0.#######}", agent.Need.ToiletNeed.Value) + "\n";
 			}
 
 			SendMessage(msg);

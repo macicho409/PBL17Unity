@@ -44,6 +44,7 @@ public class PhysiologicalModel : MonoBehaviour
     void Start()
     {
         agent = GetComponent<ThirdPersonUserControl>();
+
         FoodNeed = new Need
         {
             Value = 1.0f,
@@ -106,7 +107,7 @@ public class PhysiologicalModel : MonoBehaviour
          * agent.isPositionAcquired can be used in fute to determine
          * whether the need is satisfied*/
         counter++;
-        if (agent.isPositionAcquired & counter > 100)
+        if (counter > 100)
         {
             //PurposeOfLife = (ListOfNeeds)rnd.Next(5);
             counter = 0;
