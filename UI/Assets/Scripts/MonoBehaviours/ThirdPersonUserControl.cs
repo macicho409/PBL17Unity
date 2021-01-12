@@ -139,9 +139,10 @@ namespace Assets.ThirdPerson
                 NavMeshPath path = new NavMeshPath();
                 //agent.CalculatePath(spot, path);
                 //NavMesh.CalculatePath(agent.transform.position, spot, agent.areaMask, path);
-                Debug.Log("XXXXXXXXSpot: " + spot.ToString());
-                Debug.Log("XXXXXXXXRemaining distance: " + agent.remainingDistance.ToString());
+                Debug.Log("Spot: " + spot.ToString());
+                Debug.Log("Remaining distance: " + agent.remainingDistance.ToString());
                 if (GetPath(path, agent.transform.position, spot, agent.areaMask) == true) {
+                    Debug.Log("Path found------------------>");
                     distances.Add(GetPathLength(path));
                 }
                 else
