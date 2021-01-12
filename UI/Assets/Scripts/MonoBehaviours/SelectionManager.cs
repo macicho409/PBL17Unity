@@ -18,6 +18,8 @@ public class SelectionManager : MonoBehaviour
     public Image covidImage;
 
     private PhysiologicalModel characterPhysiologicalModel;
+    private Arrow arrow;
+    private Arrow previousarrow;
 
     private NeedSlider foodSlider;
     private NeedSlider waterSlider;
@@ -25,6 +27,7 @@ public class SelectionManager : MonoBehaviour
     private NeedSlider sexSlider;
     private NeedSlider toiletSlider;
     private NeedSlider healthSlider;
+
 
     #endregion
 
@@ -44,10 +47,19 @@ public class SelectionManager : MonoBehaviour
     {
         //Shot ray from center of Main Camera on Mouse click. If the ray encounters an Object with PhysiologicalModel attached to it then get PhysiologicalModel from Object 
         if (Input.GetMouseButtonDown(0) && Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hitInfo) && hitInfo.transform.GetComponent<PhysiologicalModel>())
+        {
             GetNeeds(hitInfo);
+        }
 
-        if (characterPhysiologicalModel != null) 
+
+        if (characterPhysiologicalModel != null)
+        {
             UpdateNeedsDisplay();
+            UpdateArrow();
+        }
+
+
+
 
         UpdateImageCovid();
     }
@@ -56,6 +68,7 @@ public class SelectionManager : MonoBehaviour
     {
         characterPhysiologicalModel = hitInfo.transform.GetComponent<PhysiologicalModel>();
         charackterName.text = hitInfo.transform.name;
+        arrow = hitInfo.transform.GetComponent<Arrow>();
     }
 
     private void UpdateNeedsDisplay()
@@ -80,4 +93,24 @@ public class SelectionManager : MonoBehaviour
         }
         catch { }
     }
+
+    private void UpdateArrow()
+    {
+        if (arrow != previousarrow)
+        {
+            try
+            {
+                previousarrow.Switch = false;
+            }
+            catch { }
+
+        }
+        else
+        {
+            arrow.Switch = true;
+        }
+        previousarrow = arrow;
+    }
+
+
 }
