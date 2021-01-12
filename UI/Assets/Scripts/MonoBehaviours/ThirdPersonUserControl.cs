@@ -6,12 +6,15 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityStandardAssets.CrossPlatformInput;
 using System.Linq;
+using System.Threading;
 
 namespace Assets.ThirdPerson
 {
     [RequireComponent(typeof (ThirdPersonCharacter))]
     public class ThirdPersonUserControl : MonoBehaviour
     {
+        public List<Transform> Children = new List<Transform>(); // Kids
+        public List<Transform> Parents = new List<Transform>(); // Mother, father
         private ThirdPersonCharacter m_Character; // A reference to the ThirdPersonCharacter on the object
         public Transform target;
         private PhysiologicalModel m_Model;
@@ -26,6 +29,10 @@ namespace Assets.ThirdPerson
         private List<Vector3> sleepSpots = new List<Vector3>();
         private List<Vector3> sexSpots = new List<Vector3>();
         private List<Vector3> toiletSpots = new List<Vector3>();
+
+        private ThirdPersonCharacter m_Character2;
+        private GameObject CurrentPartner;
+        private int noAgents = 30;
 
         private void Start()
         {
@@ -46,7 +53,7 @@ namespace Assets.ThirdPerson
             toiletSpots = new List<Vector3>() {GameObject.Find("toiletSpot_0").transform.position,
                                                GameObject.Find("toiletSpot_1").transform.position };
 
-    }
+        }
 
 
         private void Update()
@@ -60,7 +67,16 @@ namespace Assets.ThirdPerson
         // Fixed update is called in sync with physics
         private void FixedUpdate()
         {
-            if (agent.remainingDistance < 0.001f && Time.time - timeSinceUpdate > 1)
+            if (agent.name == "Character Number 1" && noAgents > 0)
+            {
+                    if (!IsInvoking("Reproduce"))
+                    {
+                    noAgents -= 1;
+                    Invoke("Reproduce", 0.2f);
+                    }
+            }
+
+            if (agent.remainingDistance < 2 && Time.time - timeSinceUpdate > 1)
             {
                 Debug.Log("Stoping");
                 timeSinceUpdate = Time.time;
@@ -160,6 +176,14 @@ namespace Assets.ThirdPerson
             }
 
             return lng;
+        }
+
+        private void Reproduce()
+        {
+            GameObject kid = Instantiate(gameObject, transform.parent);
+            CurrentPartner.GetComponent<ThirdPersonUserControl>().Children.Add(kid.transform);
+            Children.Add(kid.transform);
+            CancelInvoke("Reproduce");
         }
     }
 }
