@@ -6,17 +6,24 @@ public class Mask : MonoBehaviour
 {
     public bool MaskOn;
 
-    public Mask()
+    public float Radius {set; get;}
+
+    void Start()
     {
         MaskOn = false;
+        Radius = 5.0f;
     }
 
     // The concept is to put on a physical mask
-    public void PutOnTakeOffMask()
+    void Update()
     {
-        if (MaskOn)
-            MaskOn = false;
+        if(MaskOn)
+        {
+            Radius = 2.5f; 
+        }
         else
-            MaskOn = true;
+        {
+            Radius = 5.0f;
+        }
     }
 }

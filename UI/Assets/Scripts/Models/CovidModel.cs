@@ -56,7 +56,7 @@ public class CovidModel
         {
             var agentPhysiologicalModel = thisAgent.GetComponent<PhysiologicalModel>();
 
-            samplingTime += Time.deltaTime;
+            
 
             var r = sphereRadius - Mathf.Sqrt(
                 Mathf.Pow(thisAgent.transform.position.x - covidAgent.transform.position.x, 2) +
@@ -69,7 +69,7 @@ public class CovidModel
                 - maskWeigth * (float)Convert.ToDouble(covidAgent.GetComponent<Mask>().MaskOn))).LimitToRange(0f, 1.0f);
 
             
-            if (samplingTime >= 1)
+            if ((samplingTime += Time.deltaTime) >= 1)
             {
                 if ((int)(probability * 100.0f) >= rand.Next(0, 100)) Infected = true;
                 samplingTime = 0;
