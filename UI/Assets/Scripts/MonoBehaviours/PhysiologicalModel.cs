@@ -26,13 +26,14 @@ public class PhysiologicalModel : MonoBehaviour
         } 
     }
 
-    public enum ListOfNeeds { Food, Water, Dream, Sex, Toilet };
+    public enum ListOfNeeds { Food, Water, Dream, Sex, Toilet, HigherOrderNeeds };
     public ListOfNeeds PurposeOfLife { get; set; }
     public Need FoodNeed { get; set; }
     public Need WaterNeed { get; set; }
     public Need DreamNeed { get; set; }
     public Need SexNeed { get; set; }
     public Need ToiletNeed { get; set; }
+    public Need HigherOrderNeeds { get; set; }
 
     private Vector3 PreviousPosition;
     private ThirdPersonUserControl agent;
@@ -95,6 +96,16 @@ public class PhysiologicalModel : MonoBehaviour
             value - timeWeight * (float)Math.Sqrt(value) * time
         };
 
+        HigherOrderNeeds = new Need
+        {
+            Value = 1.0f,
+            ActionCost = 0.05f,
+            TimeWeight = 0.01f,
+            Name = "HigherOrderNeeds",
+            OnUpdateFunc = (float value, float actionCost, float timeWeight, float action, float time) =>
+            value - (action * actionCost + timeWeight) * (float)Math.Sqrt(value) * time
+        };
+
         PurposeOfLife = ListOfNeeds.Food;
 
         PreviousPosition = this.transform.position;
@@ -119,6 +130,7 @@ public class PhysiologicalModel : MonoBehaviour
         UpdateNeed(DreamNeed, action);
         UpdateNeed(SexNeed, action);
         UpdateNeed(ToiletNeed, action);
+        UpdateNeed(HigherOrderNeeds, action);
     }
 
     private void UpdateNeed(Need need, float action)

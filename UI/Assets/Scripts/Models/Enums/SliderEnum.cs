@@ -13,6 +13,7 @@ namespace Assets.Scripts.Models.Enums
         SliderDream,
         SliderSex,
         SliderToilet,
-        SliderHealth
+        SliderHealth,
+        HigherOrderNeedsSlider
     }
 }

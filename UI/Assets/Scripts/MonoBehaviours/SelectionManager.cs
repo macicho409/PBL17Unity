@@ -27,6 +27,7 @@ public class SelectionManager : MonoBehaviour
     private NeedSlider sexSlider;
     private NeedSlider toiletSlider;
     private NeedSlider healthSlider;
+    private NeedSlider HigherOrderNeedsSlider;
 
 
     #endregion
@@ -39,6 +40,7 @@ public class SelectionManager : MonoBehaviour
         sexSlider = new NeedSlider(GameObject.Find(SliderEnum.SliderSex.ToString()).GetComponent<Slider>());
         toiletSlider = new NeedSlider(GameObject.Find(SliderEnum.SliderToilet.ToString()).GetComponent<Slider>());
         healthSlider = new NeedSlider(GameObject.Find(SliderEnum.SliderHealth.ToString()).GetComponent<Slider>());
+        HigherOrderNeedsSlider = new NeedSlider(GameObject.Find(SliderEnum.HigherOrderNeedsSlider.ToString()).GetComponent<Slider>());
 
         charackterName = GameObject.Find("CharacterName").GetComponent<TextMeshProUGUI>();
     }
@@ -78,6 +80,7 @@ public class SelectionManager : MonoBehaviour
         dreamSlider.Value = characterPhysiologicalModel.DreamNeed.Value;
         sexSlider.Value = characterPhysiologicalModel.SexNeed.Value;
         toiletSlider.Value = characterPhysiologicalModel.ToiletNeed.Value;
+        HigherOrderNeedsSlider.Value = characterPhysiologicalModel.HigherOrderNeeds.Value;
         healthSlider.Value = characterPhysiologicalModel.Health;
     }
 
