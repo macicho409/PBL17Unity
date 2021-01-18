@@ -6,12 +6,15 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityStandardAssets.CrossPlatformInput;
 using System.Linq;
+using System.Threading;
 
 namespace Assets.ThirdPerson
 {
     [RequireComponent(typeof (ThirdPersonCharacter))]
     public class ThirdPersonUserControl : MonoBehaviour
     {
+        public List<Transform> Children = new List<Transform>(); // Kids
+        public List<Transform> Parents = new List<Transform>(); // Mother, father
         private ThirdPersonCharacter m_Character; // A reference to the ThirdPersonCharacter on the object
         public Transform target;
         private PhysiologicalModel m_Model;
@@ -21,26 +24,15 @@ namespace Assets.ThirdPerson
         private float timeSinceUpdate = 0;
         private const float mapHeigth = 1.25f;
         public bool isPositionAcquired = false;
-        private List<Vector3> foodSpots = new List<Vector3>() { new Vector3(139.92f, mapHeigth, -157.4f), 
-                                                                new Vector3(92.05f, mapHeigth, -203.9f), 
-                                                                new Vector3(112.5f, mapHeigth, -262.1f), 
-                                                                new Vector3(221f, mapHeigth, -78f) };
-        private List<Vector3> waterSpots = new List<Vector3>() { new Vector3(169.22f, mapHeigth, -126.51f), 
-                                                                 new Vector3(47.8f, mapHeigth, -161f), 
-                                                                 new Vector3(171.2f, mapHeigth, -273.6f), 
-                                                                 new Vector3(247.1f, mapHeigth, -77.4f) };
-        private List<Vector3> dreamSpots = new List<Vector3>() { new Vector3(47.26f, mapHeigth, -160.67f), 
-                                                                 new Vector3(87.8f, mapHeigth, 119.2f), 
-                                                                 new Vector3(62.5f, mapHeigth, -253.5f), 
-                                                                 new Vector3(288.88f, mapHeigth, -23.7f) };
-        private List<Vector3> sexSpots = new List<Vector3>() { new Vector3(120.24f, mapHeigth, -148.21f), 
-                                                               new Vector3(132.7f, mapHeigth, -159.3f), 
-                                                               new Vector3(6.25f, mapHeigth, -196.7f), 
-                                                               new Vector3(362.5f, mapHeigth, 19f) };
-        private List<Vector3> toiletSpots = new List<Vector3>() { new Vector3(88.4f, mapHeigth, -111.24f), 
-                                                                  new Vector3(161.1f, mapHeigth, -171.7f), 
-                                                                  new Vector3(155f, mapHeigth, -215.9f), 
-                                                                  new Vector3(355.7f, mapHeigth, 68.2f) };
+        private List<Vector3> foodSpots = new List<Vector3>();
+        private List<Vector3> waterSpots = new List<Vector3>();
+        private List<Vector3> sleepSpots = new List<Vector3>();
+        private List<Vector3> sexSpots = new List<Vector3>();
+        private List<Vector3> toiletSpots = new List<Vector3>();
+
+        private ThirdPersonCharacter m_Character2;
+        private GameObject CurrentPartner;
+        private int noAgents = 30;
 
         private void Start()
         {
@@ -50,6 +42,16 @@ namespace Assets.ThirdPerson
             m_Model = GetComponent<PhysiologicalModel>();
             timeSinceUpdate = Time.time;
             agent.isStopped = true;
+            foodSpots = new List<Vector3>() {GameObject.Find("FoodSpot_0").transform.position,
+                                             GameObject.Find("FoodSpot_1").transform.position };
+            waterSpots = new List<Vector3>() {GameObject.Find("waterSpot_0").transform.position,
+                                              GameObject.Find("waterSpot_1").transform.position };
+            sleepSpots = new List<Vector3>() {GameObject.Find("sleepSpot_0").transform.position,
+                                              GameObject.Find("sleepSpot_1").transform.position };
+            sexSpots = new List<Vector3>() {GameObject.Find("sexSpot_0").transform.position,
+                                            GameObject.Find("sexSpot_1").transform.position };
+            toiletSpots = new List<Vector3>() {GameObject.Find("toiletSpot_0").transform.position,
+                                               GameObject.Find("toiletSpot_1").transform.position };
 
         }
 
@@ -65,7 +67,16 @@ namespace Assets.ThirdPerson
         // Fixed update is called in sync with physics
         private void FixedUpdate()
         {
-            if (agent.remainingDistance < 0.001f && Time.time - timeSinceUpdate > 1)
+            if (agent.name == "Character Number 1" && noAgents > 0)
+            {
+                    if (!IsInvoking("Reproduce"))
+                    {
+                    noAgents -= 1;
+                    Invoke("Reproduce", 0.2f);
+                    }
+            }
+
+            if (agent.remainingDistance < 2 && Time.time - timeSinceUpdate > 1)
             {
                 Debug.Log("Stoping");
                 timeSinceUpdate = Time.time;
@@ -102,7 +113,7 @@ namespace Assets.ThirdPerson
                 case (PhysiologicalModel.ListOfNeeds.Dream):
                     Debug.Log("Looking for Dream");
                     //destination = new Vector3(47.26f, 1.25f, -160.67f);
-                    destination = FindClosestSpot(dreamSpots);
+                    destination = FindClosestSpot(sleepSpots);
                     break;
                 case (PhysiologicalModel.ListOfNeeds.Sex):
                     Debug.Log("Looking for Sex");
@@ -128,9 +139,10 @@ namespace Assets.ThirdPerson
                 NavMeshPath path = new NavMeshPath();
                 //agent.CalculatePath(spot, path);
                 //NavMesh.CalculatePath(agent.transform.position, spot, agent.areaMask, path);
-                Debug.Log("XXXXXXXXSpot: " + spot.ToString());
-                Debug.Log("XXXXXXXXRemaining distance: " + agent.remainingDistance.ToString());
+                Debug.Log("Spot: " + spot.ToString());
+                Debug.Log("Remaining distance: " + agent.remainingDistance.ToString());
                 if (GetPath(path, agent.transform.position, spot, agent.areaMask) == true) {
+                    Debug.Log("Path found------------------>");
                     distances.Add(GetPathLength(path));
                 }
                 else
@@ -165,6 +177,14 @@ namespace Assets.ThirdPerson
             }
 
             return lng;
+        }
+
+        private void Reproduce()
+        {
+            GameObject kid = Instantiate(gameObject, transform.parent);
+            CurrentPartner.GetComponent<ThirdPersonUserControl>().Children.Add(kid.transform);
+            Children.Add(kid.transform);
+            CancelInvoke("Reproduce");
         }
     }
 }
