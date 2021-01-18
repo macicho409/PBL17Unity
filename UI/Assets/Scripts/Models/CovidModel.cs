@@ -35,7 +35,8 @@ public class CovidModel
     private readonly float distanceWeigth;
     private readonly float healthWeigth;
     private readonly float maskWeigth;
-    private readonly float sphereRadius;
+
+    public float sphereRadius { get; set; }
 
     public CovidModel(GameObject thisAgent, float distanceWeigth, float healthWeigth, float maskWeigth, float sphereRadius, bool isInfected)
     {
