@@ -22,6 +22,7 @@ namespace Assets.ThirdPerson
         private bool m_Jump;
         private Vector3 destination;
         private float timeSinceUpdate = 0;
+        private float timeSincePopulating = 0;
         private const float mapHeigth = 1.25f;
         public bool isPositionAcquired = false;
         private List<Vector3> foodSpots = new List<Vector3>();
@@ -41,6 +42,7 @@ namespace Assets.ThirdPerson
             m_Character = GetComponent<ThirdPersonCharacter>();
             m_Model = GetComponent<PhysiologicalModel>();
             timeSinceUpdate = Time.time;
+            timeSincePopulating = Time.time;
             agent.isStopped = true;
             foodSpots = new List<Vector3>() {GameObject.Find("FoodSpot_0").transform.position,
                                              GameObject.Find("FoodSpot_1").transform.position };
@@ -53,6 +55,11 @@ namespace Assets.ThirdPerson
             toiletSpots = new List<Vector3>() {GameObject.Find("toiletSpot_0").transform.position,
                                                GameObject.Find("toiletSpot_1").transform.position };
 
+            agent.isStopped = false;
+            agent.SetDestination(foodSpots[0]);
+            isPositionAcquired = false;
+            m_Character.ChangeAnimatorState(0.4f);
+            Debug.Log("Moving");
         }
 
 
@@ -69,10 +76,11 @@ namespace Assets.ThirdPerson
         {
             if (agent.name == "Character Number 1" && noAgents > 0)
             {
-                    if (!IsInvoking("Reproduce"))
+                    if (!IsInvoking("Reproduce") && Time.time - timeSincePopulating > 0.5)
                     {
                     noAgents -= 1;
                     Invoke("Reproduce", 0.2f);
+                    timeSincePopulating = Time.time;
                     }
             }
 
