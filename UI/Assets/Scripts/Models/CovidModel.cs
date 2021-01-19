@@ -35,7 +35,8 @@ public class CovidModel
     private readonly float distanceWeigth;
     private readonly float healthWeigth;
     private readonly float maskWeigth;
-    private readonly float sphereRadius;
+
+    public float sphereRadius { get; set; }
 
     public CovidModel(GameObject thisAgent, float distanceWeigth, float healthWeigth, float maskWeigth, float sphereRadius, bool isInfected)
     {
@@ -56,6 +57,8 @@ public class CovidModel
         {
             var agentPhysiologicalModel = thisAgent.GetComponent<PhysiologicalModel>();
 
+            
+
             var r = sphereRadius - Mathf.Sqrt(
                 Mathf.Pow(thisAgent.transform.position.x - covidAgent.transform.position.x, 2) +
                 Mathf.Pow(thisAgent.transform.position.y - covidAgent.transform.position.y, 2) +
@@ -66,7 +69,8 @@ public class CovidModel
                 + (1.0f - agentPhysiologicalModel.Health) * healthWeigth
                 - maskWeigth * (float)Convert.ToDouble(covidAgent.GetComponent<Mask>().MaskOn))).LimitToRange(0f, 1.0f);
 
-            if ((samplingTime += Time.deltaTime) >= 3)
+            
+            if ((samplingTime += Time.deltaTime) >= 1)
             {
                 if ((int)(probability * 100.0f) >= rand.Next(0, 100)) Infected = true;
                 samplingTime = 0;

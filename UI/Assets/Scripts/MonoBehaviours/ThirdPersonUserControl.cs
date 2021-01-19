@@ -33,6 +33,7 @@ namespace Assets.ThirdPerson
         private List<Vector3> sleepSpots = new List<Vector3>();
         private List<Vector3> sexSpots = new List<Vector3>();
         private List<Vector3> toiletSpots = new List<Vector3>();
+        private List<Vector3> highSpots = new List<Vector3>();
 
         private ThirdPersonCharacter m_Character2;
         private GameObject CurrentPartner;
@@ -57,6 +58,8 @@ namespace Assets.ThirdPerson
                                             GameObject.Find("sexSpot_1").transform.position };
             toiletSpots = new List<Vector3>() {GameObject.Find("toiletSpot_0").transform.position,
                                                GameObject.Find("toiletSpot_1").transform.position };
+            highSpots = new List<Vector3>() {GameObject.Find("highSpot_0").transform.position,
+                                               GameObject.Find("highSpot_1").transform.position };
 
             agent.isStopped = false;
             agent.SetDestination(foodSpots[0]);
@@ -143,6 +146,11 @@ namespace Assets.ThirdPerson
                     Debug.Log("Looking for Toilet");
                     //destination = new Vector3(88.4f, 1.25f, -111.24f);
                     destination = FindClosestSpot(toiletSpots);
+                    break;
+                case (PhysiologicalModel.ListOfNeeds.HigherOrderNeeds):
+                    Debug.Log("Looking for Higher order needs");
+                    //destination = new Vector3(88.4f, 1.25f, -111.24f);
+                    destination = FindClosestSpot(highSpots);
                     break;
             }
             return destination;
