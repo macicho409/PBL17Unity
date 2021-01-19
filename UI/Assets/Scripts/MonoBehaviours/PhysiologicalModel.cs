@@ -119,7 +119,7 @@ public class PhysiologicalModel : MonoBehaviour
         counter++;
         if(agent.isPositionAcquired & counter > 100)
         {
-            PurposeOfLife = (ListOfNeeds)rnd.Next(5);
+            PurposeOfLife = (ListOfNeeds)rnd.Next(6);
             counter = 0;
         }
         /*end of workaroung*/
