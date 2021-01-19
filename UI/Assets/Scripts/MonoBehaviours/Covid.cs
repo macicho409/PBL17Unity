@@ -9,17 +9,18 @@ public class Covid : MonoBehaviour
 
     void Start()
     {
-        CovidInfection = new CovidModel(this.gameObject, 0.3f, 0.5f, 0.2f, 4, Infected);
+        CovidInfection = new CovidModel(this.gameObject, 0.3f, 0.5f, 0.2f, this.transform.GetComponent<Mask>().Radius, Infected);
     }
 
     void Update()
     {
         DetectCollisions();
+        CovidInfection.sphereRadius = this.transform.GetComponent<Mask>().Radius;
     }
 
     private void DetectCollisions()
     {
-        Collider[] hitColliders = Physics.OverlapSphere(this.transform.position, 4.0f, 256);
+        Collider[] hitColliders = Physics.OverlapSphere(this.transform.position, this.transform.GetComponent<Mask>().Radius, 256);
         List<Covid> covids = new List<Covid>();
 
         if(!this.Infected)
