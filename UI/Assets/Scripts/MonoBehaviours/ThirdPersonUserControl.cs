@@ -82,12 +82,12 @@ namespace Assets.ThirdPerson
         {
             if (agent.name == "Character Number 1" && noAgents > 0)
             {
-                    if (!IsInvoking("Reproduce") && Time.time - timeSincePopulating > 0.5)
-                    {
+                if (!IsInvoking("Reproduce") && Time.time - timeSincePopulating > 0.5)
+                {
                     noAgents -= 1;
-                    Invoke("Reproduce", 0.2f);
+                    Invoke(nameof(Reproduce), 0.2f);
                     timeSincePopulating = Time.time;
-                    }
+                }
             }
 
             if (agent.remainingDistance < 2 && Time.time - timeSinceUpdate > 1)
@@ -100,7 +100,9 @@ namespace Assets.ThirdPerson
                 agent.isStopped = true;
                 isPositionAcquired = true;
             }
+
             Debug.Log("Need satisfied: _______________" + isNeedSatisfied.ToString());
+
             if (Time.time - timeSinceUpdate > 15 && agent.isStopped == true)
             {
                 Debug.Log("Moving");
@@ -110,16 +112,19 @@ namespace Assets.ThirdPerson
                 isNeedSatisfied = false;
                 isPositionAcquired = false;
             }
+
             if(agent.isStopped && timeSinceUpdate > 10)
             {
                 isNeedSatisfied = true;
             }
+
             m_Jump = false;
         }
 
         private Vector3 FindDestination()
         {
             Vector3 destination = new Vector3(0f, 0f, 0f);
+
             switch (m_Model.PurposeOfLife)
             {
                 case (ListOfNeeds.Food):
@@ -147,12 +152,13 @@ namespace Assets.ThirdPerson
                     //destination = new Vector3(88.4f, 1.25f, -111.24f);
                     destination = FindClosestSpot(toiletSpots);
                     break;
-                case (PhysiologicalModel.ListOfNeeds.HigherOrderNeeds):
+                case (ListOfNeeds.HigherOrderNeeds):
                     Debug.Log("Looking for Higher order needs");
                     //destination = new Vector3(88.4f, 1.25f, -111.24f);
                     destination = FindClosestSpot(highSpots);
                     break;
             }
+
             return destination;
         }
 
@@ -160,6 +166,7 @@ namespace Assets.ThirdPerson
         {
             List<float> distances = new List<float>();
             int minimumValueIndex=0;
+
             foreach (Vector3 spot in listOfSpots)
             {
                 //agent.SetDestination(spot);
@@ -177,8 +184,11 @@ namespace Assets.ThirdPerson
                     distances.Add(340282300000000);
                 }
             }
+
             minimumValueIndex = distances.IndexOf(distances.Min());
+
             Debug.Log("Going to point: " + listOfSpots[minimumValueIndex].ToString() + "Index: " + minimumValueIndex.ToString());
+
             return listOfSpots[minimumValueIndex];
         }
 

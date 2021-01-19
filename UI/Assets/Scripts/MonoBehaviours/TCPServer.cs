@@ -48,10 +48,6 @@ public class TCPServer : MonoBehaviour
         tcpListenerThread.Start();
 	}
 
-	void Update()
-	{
-
-	}
 
 	/// <summary> 	
 	/// Runs in background TcpServerThread; Handles incomming TcpClient requests 	

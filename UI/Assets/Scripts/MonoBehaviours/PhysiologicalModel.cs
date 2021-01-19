@@ -27,10 +27,6 @@ public class PhysiologicalModel : MonoBehaviour
         } 
     }
 
-<<<<<<< HEAD
-=======
-    public enum ListOfNeeds { Food, Water, Dream, Sex, Toilet, HigherOrderNeeds };
->>>>>>> origin/main
     public ListOfNeeds PurposeOfLife { get; set; }
     public Need FoodNeed { get; set; }
     public Need WaterNeed { get; set; }
@@ -40,15 +36,15 @@ public class PhysiologicalModel : MonoBehaviour
     public Need HigherOrderNeeds { get; set; }
 
     private Vector3 PreviousPosition;
-    private ThirdPersonUserControl agent;
+    //private ThirdPersonUserControl agent;
     private int counter = 0;
-    private System.Random rnd = new System.Random();
+    private readonly System.Random rnd = new System.Random();
 
     #endregion
 
     void Start()
     {
-        agent = GetComponent<ThirdPersonUserControl>();
+        //agent = GetComponent<ThirdPersonUserControl>();
 
         FoodNeed = new Need
         {
@@ -124,11 +120,7 @@ public class PhysiologicalModel : MonoBehaviour
         counter++;
         if (counter > 100)
         {
-<<<<<<< HEAD
-            //PurposeOfLife = (ListOfNeeds)rnd.Next(5);
-=======
             PurposeOfLife = (ListOfNeeds)rnd.Next(6);
->>>>>>> origin/main
             counter = 0;
             Debug.Log(PurposeOfLife.ToString());
         }
