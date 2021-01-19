@@ -23,8 +23,11 @@ namespace Assets.ThirdPerson
         private bool m_Jump;
         private Vector3 destination;
         private float timeSinceUpdate = 0;
+        private float timeSincePopulating = 0;
+        private float stopTime = 0;
         private const float mapHeigth = 1.25f;
         public bool isPositionAcquired = false;
+        public bool isNeedSatisfied = false;
         private List<Vector3> foodSpots = new List<Vector3>();
         private List<Vector3> waterSpots = new List<Vector3>();
         private List<Vector3> sleepSpots = new List<Vector3>();
@@ -42,6 +45,7 @@ namespace Assets.ThirdPerson
             m_Character = GetComponent<ThirdPersonCharacter>();
             m_Model = GetComponent<PhysiologicalModel>();
             timeSinceUpdate = Time.time;
+            timeSincePopulating = Time.time;
             agent.isStopped = true;
             foodSpots = new List<Vector3>() {GameObject.Find("FoodSpot_0").transform.position,
                                              GameObject.Find("FoodSpot_1").transform.position };
@@ -53,6 +57,12 @@ namespace Assets.ThirdPerson
                                             GameObject.Find("sexSpot_1").transform.position };
             toiletSpots = new List<Vector3>() {GameObject.Find("toiletSpot_0").transform.position,
                                                GameObject.Find("toiletSpot_1").transform.position };
+
+            agent.isStopped = false;
+            agent.SetDestination(foodSpots[0]);
+            isPositionAcquired = false;
+            m_Character.ChangeAnimatorState(0.4f);
+            Debug.Log("Moving");
         }
 
 
@@ -69,10 +79,11 @@ namespace Assets.ThirdPerson
         {
             if (agent.name == "Character Number 1" && noAgents > 0)
             {
-                    if (!IsInvoking("Reproduce"))
+                    if (!IsInvoking("Reproduce") && Time.time - timeSincePopulating > 0.5)
                     {
                     noAgents -= 1;
                     Invoke("Reproduce", 0.2f);
+                    timeSincePopulating = Time.time;
                     }
             }
 
@@ -86,12 +97,19 @@ namespace Assets.ThirdPerson
                 agent.isStopped = true;
                 isPositionAcquired = true;
             }
-            if (Time.time - timeSinceUpdate > 5 && agent.isStopped == true)
+            Debug.Log("Need satisfied: _______________" + isNeedSatisfied.ToString());
+            if (Time.time - timeSinceUpdate > 15 && agent.isStopped == true)
             {
                 Debug.Log("Moving");
+                timeSinceUpdate = Time.time;
                 agent.isStopped = false;
                 m_Character.ChangeAnimatorState(0.4f);
+                isNeedSatisfied = false;
                 isPositionAcquired = false;
+            }
+            if(agent.isStopped && timeSinceUpdate > 10)
+            {
+                isNeedSatisfied = true;
             }
             m_Jump = false;
         }
@@ -140,10 +158,10 @@ namespace Assets.ThirdPerson
                 NavMeshPath path = new NavMeshPath();
                 //agent.CalculatePath(spot, path);
                 //NavMesh.CalculatePath(agent.transform.position, spot, agent.areaMask, path);
-                Debug.Log("Spot: " + spot.ToString());
-                Debug.Log("Remaining distance: " + agent.remainingDistance.ToString());
+                //Debug.Log("Spot: " + spot.ToString());
+                //Debug.Log("Remaining distance: " + agent.remainingDistance.ToString());
                 if (GetPath(path, agent.transform.position, spot, agent.areaMask) == true) {
-                    Debug.Log("Path found------------------>");
+                    //Debug.Log("Path found------------------>");
                     distances.Add(GetPathLength(path));
                 }
                 else
@@ -184,8 +202,11 @@ namespace Assets.ThirdPerson
         private void Reproduce()
         {
             GameObject kid = Instantiate(gameObject, transform.parent);
+            int char_num = 30 - noAgents;
+            kid.name = "agent_" + char_num.ToString();
+            //kid.transform.tag = "agent_"+ char_num.ToString();
+            //kid.tag = "Character_Number_"+ char_num.ToString();
             CurrentPartner.GetComponent<ThirdPersonUserControl>().Children.Add(kid.transform);
-            Children.Add(kid.transform);
             CancelInvoke("Reproduce");
         }
     }
