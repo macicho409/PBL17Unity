@@ -25,27 +25,33 @@ public class TCPServer : MonoBehaviour
 	private TcpClient connectedTcpClient;
 
 	private Agent[] agents;
+
+	int i = 0;
 	#endregion
 
-	void Start()
+	void Update()
 	{
-		var agentObjs = GameObject.FindGameObjectsWithTag("Agent");
-
-		agents = new Agent[agentObjs.Length];
-
-		var iterator = 0;
-		foreach(var obj in agentObjs)
+		i++;
+		if ( i == 3000)
         {
-			agents[iterator] = new Agent() { GameObject = obj, Need = obj.GetComponent<PhysiologicalModel>() };
-			iterator++;
+			var agentObjs = GameObject.FindGameObjectsWithTag("Agent");
+
+			agents = new Agent[agentObjs.Length];
+
+			var iterator = 0;
+			foreach(var obj in agentObjs)
+			{
+				agents[iterator] = new Agent() { GameObject = obj, Need = obj.GetComponent<PhysiologicalModel>() };
+				iterator++;
+			}
+
+			tcpListenerThread = new Thread(new ThreadStart(ListenForRequests))
+			{
+				IsBackground = true
+			};
+
+			tcpListenerThread.Start();
 		}
-
-		tcpListenerThread = new Thread(new ThreadStart(ListenForRequests))
-        {
-            IsBackground = true
-        };
-
-        tcpListenerThread.Start();
 	}
 
 
@@ -108,7 +114,7 @@ public class TCPServer : MonoBehaviour
 					+ String.Format(iFormatProvider, "{0:0.#######}", agent.Need.WaterNeed.Value) + ","
 					+ String.Format(iFormatProvider, "{0:0.#######}", agent.Need.DreamNeed.Value) + ","
 					+ String.Format(iFormatProvider, "{0:0.#######}", agent.Need.SexNeed.Value) + ","
-					+ String.Format(iFormatProvider, "{0:0.#######}", agent.Need.ToiletNeed.Value) + "\n";
+					+ String.Format(iFormatProvider, "{0:0.#######}", agent.Need.ToiletNeed.Value) + ",1\n";
 			}
 
 			SendMessage(msg);

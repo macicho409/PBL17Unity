@@ -34,15 +34,26 @@ namespace Assets.Scripts.Models
         /// Pass lambda expression to change what's happening on Update method in form: (value, actionCost, timeWeight, action, time)
         /// </summary>
         public Func<float, float, float, float, float, float> OnUpdateFunc { get; set; }
+        /// <summary>
+        /// Pass lambda expression to change what's happening on Update method in form: (value, timeWeight, time)
+        /// </summary>
+        public Func<float, float, float, float> OnUpdateFuncSatisfy { get; set; }
 
         /// <summary>
         /// Changes the value stored in a way described by OnUpdateFunc
         /// </summary>
         /// <param name="action">Action value</param>
         /// <param name="time">Passing time - usually Time.deltaTime</param>
-        public void Update(float action, float time)
+        public void Update(float action, float time, bool isNeedBeingSatisfied)
         {
-            this.Value = OnUpdateFunc.Invoke(this.Value, this.ActionCost, this.TimeWeight, action, time);
+            if (!isNeedBeingSatisfied)
+            {
+                this.Value = OnUpdateFunc.Invoke(this.Value, this.ActionCost, this.TimeWeight, action, time);
+            }
+            else
+            {
+                this.Value = OnUpdateFuncSatisfy.Invoke(this.Value, this.TimeWeight, time);
+            }
         }
     }
 }

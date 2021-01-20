@@ -36,7 +36,7 @@ public class PhysiologicalModel : MonoBehaviour
     public Need HigherOrderNeeds { get; set; }
 
     private Vector3 PreviousPosition;
-    //private ThirdPersonUserControl agent;
+    private ThirdPersonUserControl agent;
     private int counter = 0;
     private readonly System.Random rnd = new System.Random();
 
@@ -44,7 +44,7 @@ public class PhysiologicalModel : MonoBehaviour
 
     void Start()
     {
-        //agent = GetComponent<ThirdPersonUserControl>();
+        agent = GetComponent<ThirdPersonUserControl>();
 
         FoodNeed = new Need
         {
@@ -53,7 +53,8 @@ public class PhysiologicalModel : MonoBehaviour
             TimeWeight = 0.01f,
             Name = "Food",
             OnUpdateFunc = (float value, float actionCost, float timeWeight, float action, float time) =>
-            value - (action * actionCost + timeWeight) * (float)Math.Sqrt(value) * time
+            value - (action * actionCost + timeWeight) * (float)Math.Sqrt(value) * time,
+            OnUpdateFuncSatisfy = (float value, float timeWeight, float time) => 1.0f
         };
 
         WaterNeed = new Need
@@ -63,7 +64,8 @@ public class PhysiologicalModel : MonoBehaviour
             TimeWeight = 0.01f,
             Name = "Water",
             OnUpdateFunc = (float value, float actionCost, float timeWeight, float action, float time) =>
-            value - (action * actionCost + timeWeight) * (float)Math.Sqrt(value) * time
+            value - (action * actionCost + timeWeight) * (float)Math.Sqrt(value) * time,
+            OnUpdateFuncSatisfy = (float value, float timeWeight, float time) => 1.0f
         };
 
         DreamNeed = new Need
@@ -73,7 +75,8 @@ public class PhysiologicalModel : MonoBehaviour
             TimeWeight = 0.01f,
             Name = "Dream",
             OnUpdateFunc = (float value, float actionCost, float timeWeight, float action, float time) =>
-            value - (action * actionCost + timeWeight) * (float)Math.Sqrt(value) * time
+            value - (action * actionCost + timeWeight) * (float)Math.Sqrt(value) * time,
+            OnUpdateFuncSatisfy = (float value, float timeWeight, float time) => 1.0f
         };
 
         SexNeed = new Need
@@ -84,7 +87,8 @@ public class PhysiologicalModel : MonoBehaviour
             TimeWeight = 0.01f,
             Name = "Sex",
             OnUpdateFunc = (float value, float actionCost, float timeWeight, float action, float time) =>
-            value - timeWeight * (float)Math.Sqrt(value - 0.3f) * time
+            value - timeWeight * (float)Math.Sqrt(value - 0.3f) * time,
+            OnUpdateFuncSatisfy = (float value, float timeWeight, float time) => 1.0f
         };
 
         ToiletNeed = new Need
@@ -94,7 +98,8 @@ public class PhysiologicalModel : MonoBehaviour
             TimeWeight = 0.01f,
             Name = "Toilet",
             OnUpdateFunc = (float value, float actionCost, float timeWeight, float action, float time) =>
-            value - timeWeight * (float)Math.Sqrt(value) * time
+            value - timeWeight * (float)Math.Sqrt(value) * time,
+            OnUpdateFuncSatisfy = (float value, float timeWeight, float time) => 1.0f
         };
 
         HigherOrderNeeds = new Need
@@ -104,7 +109,8 @@ public class PhysiologicalModel : MonoBehaviour
             TimeWeight = 0.01f,
             Name = "HigherOrderNeeds",
             OnUpdateFunc = (float value, float actionCost, float timeWeight, float action, float time) =>
-            value - (action * actionCost + timeWeight) * (float)Math.Sqrt(value) * time
+            value - (action * actionCost + timeWeight) * (float)Math.Sqrt(value) * time,
+            OnUpdateFuncSatisfy = (float value, float timeWeight, float time) => 1.0f
         };
 
         PurposeOfLife = ListOfNeeds.Food;
@@ -117,27 +123,27 @@ public class PhysiologicalModel : MonoBehaviour
         /* workaround for determining purpose of life
          * agent.isPositionAcquired can be used in fute to determine
          * whether the need is satisfied*/
-        counter++;
-        if (counter > 100)
-        {
-            PurposeOfLife = (ListOfNeeds)rnd.Next(6);
-            counter = 0;
-            Debug.Log(PurposeOfLife.ToString());
-        }
+        //counter++;
+        //if (counter > 100)
+        //{
+        //    PurposeOfLife = (ListOfNeeds)rnd.Next(6);
+        //    counter = 0;
+        //    Debug.Log(PurposeOfLife.ToString());
+        //}
         /*end of workaroung*/
 
         float action = UpdateAction();
-        UpdateNeed(FoodNeed, action);
-        UpdateNeed(WaterNeed, action);
-        UpdateNeed(DreamNeed, action);
-        UpdateNeed(SexNeed, action);
-        UpdateNeed(ToiletNeed, action);
-        UpdateNeed(HigherOrderNeeds, action);
+        UpdateNeed(FoodNeed, action, agent.currentPossitionNeeds.Contains(ListOfNeeds.Food));
+        UpdateNeed(WaterNeed, action, agent.currentPossitionNeeds.Contains(ListOfNeeds.Water));
+        UpdateNeed(DreamNeed, action, agent.currentPossitionNeeds.Contains(ListOfNeeds.Dream));
+        UpdateNeed(SexNeed, action, agent.currentPossitionNeeds.Contains(ListOfNeeds.Sex));
+        UpdateNeed(ToiletNeed, action, agent.currentPossitionNeeds.Contains(ListOfNeeds.Toilet));
+        UpdateNeed(HigherOrderNeeds, action, agent.currentPossitionNeeds.Contains(ListOfNeeds.HigherOrderNeeds));
     }
 
-    private void UpdateNeed(Need need, float action)
+    private void UpdateNeed(Need need, float action, bool isNeedBeingSatisfied)
     {
-        need.Update(action, Time.deltaTime);
+        need.Update(action, Time.deltaTime, isNeedBeingSatisfied);
     }
 
     private float UpdateAction()

@@ -14,6 +14,8 @@ namespace Assets.ThirdPerson
     [RequireComponent(typeof (ThirdPersonCharacter))]
     public class ThirdPersonUserControl : MonoBehaviour
     {
+        private readonly int satisfyNeedsRange = 5;
+
         public List<Transform> Children = new List<Transform>(); // Kids
         public List<Transform> Parents = new List<Transform>(); // Mother, father
         private ThirdPersonCharacter m_Character; // A reference to the ThirdPersonCharacter on the object
@@ -38,6 +40,8 @@ namespace Assets.ThirdPerson
         private ThirdPersonCharacter m_Character2;
         private GameObject CurrentPartner;
         private int noAgents = 30;
+
+        public List<ListOfNeeds> currentPossitionNeeds;
 
         private void Start()
         {
@@ -80,9 +84,9 @@ namespace Assets.ThirdPerson
         // Fixed update is called in sync with physics
         private void FixedUpdate()
         {
-            if (agent.name == "Character Number 1" && noAgents > 0)
+            if (agent.name == "Bob" && noAgents > 0)
             {
-                if (!IsInvoking("Reproduce") && Time.time - timeSincePopulating > 0.5)
+                if (!IsInvoking("Reproduce") && Time.time - timeSincePopulating > 0.02)
                 {
                     noAgents -= 1;
                     Invoke(nameof(Reproduce), 0.2f);
@@ -119,6 +123,8 @@ namespace Assets.ThirdPerson
             }
 
             m_Jump = false;
+
+            BroadcastSatysfyingNeedsSpots(satisfyNeedsRange);
         }
 
         private Vector3 FindDestination()
@@ -162,6 +168,24 @@ namespace Assets.ThirdPerson
             return destination;
         }
 
+        private void BroadcastSatysfyingNeedsSpots(int needSatisfyRange)
+        {
+            currentPossitionNeeds = new List<ListOfNeeds>();
+
+            foreach(var spot in foodSpots)
+                if (Vector3.Distance(spot, agent.transform.position) <= needSatisfyRange) currentPossitionNeeds.Add(ListOfNeeds.Food);
+            foreach (var spot in waterSpots)
+                if (Vector3.Distance(spot, agent.transform.position) <= needSatisfyRange) currentPossitionNeeds.Add(ListOfNeeds.Water);
+            foreach (var spot in sleepSpots)
+                if (Vector3.Distance(spot, agent.transform.position) <= needSatisfyRange) currentPossitionNeeds.Add(ListOfNeeds.Dream);
+            foreach (var spot in sexSpots)
+                if (Vector3.Distance(spot, agent.transform.position) <= needSatisfyRange) currentPossitionNeeds.Add(ListOfNeeds.Sex);
+            foreach (var spot in toiletSpots)
+                if (Vector3.Distance(spot, agent.transform.position) <= needSatisfyRange) currentPossitionNeeds.Add(ListOfNeeds.Toilet);
+            foreach (var spot in highSpots)
+                if (Vector3.Distance(spot, agent.transform.position) <= needSatisfyRange) currentPossitionNeeds.Add(ListOfNeeds.HigherOrderNeeds);
+        }
+
         private Vector3 FindClosestSpot(List<Vector3> listOfSpots)
         {
             List<float> distances = new List<float>();
@@ -181,7 +205,7 @@ namespace Assets.ThirdPerson
                 }
                 else
                 {
-                    distances.Add(340282300000000);
+                    distances.Add(340282300000000); //magical number?
                 }
             }
 
@@ -224,7 +248,8 @@ namespace Assets.ThirdPerson
             kid.name = "agent_" + char_num.ToString();
             //kid.transform.tag = "agent_"+ char_num.ToString();
             //kid.tag = "Character_Number_"+ char_num.ToString();
-            CurrentPartner.GetComponent<ThirdPersonUserControl>().Children.Add(kid.transform);
+            if(CurrentPartner != null)
+                CurrentPartner.GetComponent<ThirdPersonUserControl>().Children.Add(kid.transform);
             CancelInvoke("Reproduce");
         }
     }
