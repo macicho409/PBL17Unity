@@ -57,22 +57,20 @@ public class CovidModel
         {
             var agentPhysiologicalModel = thisAgent.GetComponent<PhysiologicalModel>();
 
-            
-
             var r = sphereRadius - Mathf.Sqrt(
                 Mathf.Pow(thisAgent.transform.position.x - covidAgent.transform.position.x, 2) +
                 Mathf.Pow(thisAgent.transform.position.y - covidAgent.transform.position.y, 2) +
                 Mathf.Pow(thisAgent.transform.position.z - covidAgent.transform.position.z, 2));
 
             var probability =
-                ((r * distanceWeigth
+                (r * distanceWeigth
                 + (1.0f - agentPhysiologicalModel.Health) * healthWeigth
-                - maskWeigth * (float)Convert.ToDouble(covidAgent.GetComponent<Mask>().MaskOn))).LimitToRange(0f, 1.0f);
+                - maskWeigth * (float)Convert.ToDouble(covidAgent.GetComponent<Mask>().MaskOn)).LimitToRange(0f, 1.0f);
 
             
-            if ((samplingTime += Time.deltaTime) >= 1)
+            if ((samplingTime += Time.deltaTime) >= 5)
             {
-                if ((int)(probability * 100.0f) >= rand.Next(0, 100)) Infected = true;
+                if ((int)(probability * 3.0f) >= rand.Next(0, 100)) Infected = true;
                 samplingTime = 0;
             }
         }

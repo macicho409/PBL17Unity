@@ -27,7 +27,7 @@ public class PhysiologicalModel : MonoBehaviour
         } 
     }
 
-    public ListOfNeeds PurposeOfLife { get; set; }
+    public ListOfNeeds? PurposeOfLife { get; set; }
     public Need FoodNeed { get; set; }
     public Need WaterNeed { get; set; }
     public Need DreamNeed { get; set; }
@@ -48,9 +48,9 @@ public class PhysiologicalModel : MonoBehaviour
 
         FoodNeed = new Need
         {
-            Value = 1.0f,
-            ActionCost = 0.1f,
-            TimeWeight = 0.01f,
+            Value = UnityEngine.Random.Range(0.3f, 1.0f),
+            ActionCost = UnityEngine.Random.Range(0.03f, 0.1f),
+            TimeWeight = UnityEngine.Random.Range(0.003f, 0.01f),
             Name = "Food",
             OnUpdateFunc = (float value, float actionCost, float timeWeight, float action, float time) =>
             value - (action * actionCost + timeWeight) * (float)Math.Sqrt(value) * time,
@@ -59,9 +59,9 @@ public class PhysiologicalModel : MonoBehaviour
 
         WaterNeed = new Need
         {
-            Value = 1.0f,
-            ActionCost = 0.1f,
-            TimeWeight = 0.01f,
+            Value = UnityEngine.Random.Range(0.3f, 1.0f),
+            ActionCost = UnityEngine.Random.Range(0.03f, 0.1f),
+            TimeWeight = UnityEngine.Random.Range(0.003f, 0.01f),
             Name = "Water",
             OnUpdateFunc = (float value, float actionCost, float timeWeight, float action, float time) =>
             value - (action * actionCost + timeWeight) * (float)Math.Sqrt(value) * time,
@@ -70,9 +70,9 @@ public class PhysiologicalModel : MonoBehaviour
 
         DreamNeed = new Need
         {
-            Value = 1.0f,
-            ActionCost = 0.1f,
-            TimeWeight = 0.01f,
+            Value = UnityEngine.Random.Range(0.3f, 1.0f),
+            ActionCost = UnityEngine.Random.Range(0.03f, 0.1f),
+            TimeWeight = UnityEngine.Random.Range(0.003f, 0.01f),
             Name = "Dream",
             OnUpdateFunc = (float value, float actionCost, float timeWeight, float action, float time) =>
             value - (action * actionCost + timeWeight) * (float)Math.Sqrt(value) * time,
@@ -82,9 +82,9 @@ public class PhysiologicalModel : MonoBehaviour
         SexNeed = new Need
         {
             LowerLimit = 0.3f,
-            Value = 1.0f,
-            ActionCost = 0.1f,
-            TimeWeight = 0.01f,
+            Value = UnityEngine.Random.Range(0.3f, 1.0f),
+            ActionCost = UnityEngine.Random.Range(0.03f, 0.1f),
+            TimeWeight = UnityEngine.Random.Range(0.003f, 0.01f),
             Name = "Sex",
             OnUpdateFunc = (float value, float actionCost, float timeWeight, float action, float time) =>
             value - timeWeight * (float)Math.Sqrt(value - 0.3f) * time,
@@ -93,9 +93,9 @@ public class PhysiologicalModel : MonoBehaviour
 
         ToiletNeed = new Need
         {
-            Value = 1.0f,
-            ActionCost = 0.1f,
-            TimeWeight = 0.01f,
+            Value = UnityEngine.Random.Range(0.3f, 1.0f),
+            ActionCost = UnityEngine.Random.Range(0.03f, 0.1f),
+            TimeWeight = UnityEngine.Random.Range(0.003f, 0.01f),
             Name = "Toilet",
             OnUpdateFunc = (float value, float actionCost, float timeWeight, float action, float time) =>
             value - timeWeight * (float)Math.Sqrt(value) * time,
@@ -104,16 +104,16 @@ public class PhysiologicalModel : MonoBehaviour
 
         HigherOrderNeeds = new Need
         {
-            Value = 1.0f,
-            ActionCost = 0.05f,
-            TimeWeight = 0.01f,
+            Value = UnityEngine.Random.Range(0.3f, 1.0f),
+            ActionCost = UnityEngine.Random.Range(0.003f, 0.05f),
+            TimeWeight = UnityEngine.Random.Range(0.003f, 0.01f),
             Name = "HigherOrderNeeds",
             OnUpdateFunc = (float value, float actionCost, float timeWeight, float action, float time) =>
             value - (action * actionCost + timeWeight) * (float)Math.Sqrt(value) * time,
             OnUpdateFuncSatisfy = (float value, float timeWeight, float time) => 1.0f
         };
 
-        PurposeOfLife = ListOfNeeds.Food;
+        PurposeOfLife = null;
 
         PreviousPosition = this.transform.position;
     }

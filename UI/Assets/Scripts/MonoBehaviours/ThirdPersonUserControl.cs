@@ -8,6 +8,8 @@ using UnityStandardAssets.CrossPlatformInput;
 using System.Linq;
 using System.Threading;
 using Assets.Scripts.Models.Enums;
+using Assets.Scripts.Services;
+using System.Threading.Tasks;
 
 namespace Assets.ThirdPerson
 {
@@ -23,7 +25,7 @@ namespace Assets.ThirdPerson
         private PhysiologicalModel m_Model;
         NavMeshAgent agent;
         private bool m_Jump;
-        private Vector3 destination;
+        private Vector3? destination;
         private float timeSinceUpdate = 0;
         private float timeSincePopulating = 0;
         private float stopTime = 0;
@@ -39,12 +41,13 @@ namespace Assets.ThirdPerson
 
         private ThirdPersonCharacter m_Character2;
         private GameObject CurrentPartner;
-        private int noAgents = 30;
+        public int noAgents = 30;
 
         public List<ListOfNeeds> currentPossitionNeeds;
 
         private void Start()
         {
+            noAgents = StaticContainerService.NoAgents - 1;
             // get the third person character ( this should never be null due to require component )
             agent = GetComponent<NavMeshAgent>();
             m_Character = GetComponent<ThirdPersonCharacter>();
@@ -66,10 +69,10 @@ namespace Assets.ThirdPerson
                                                GameObject.Find("highSpot_1").transform.position };
 
             agent.isStopped = false;
-            agent.SetDestination(foodSpots[0]);
+            //agent.SetDestination(foodSpots[0]);
             isPositionAcquired = false;
-            m_Character.ChangeAnimatorState(0.4f);
-            Debug.Log("Moving");
+            //m_Character.ChangeAnimatorState(0.4f);
+            //Debug.Log("Moving");
         }
 
 
@@ -86,11 +89,14 @@ namespace Assets.ThirdPerson
         {
             if (agent.name == "Bob" && noAgents > 0)
             {
-                if (!IsInvoking("Reproduce") && Time.time - timeSincePopulating > 0.02)
+                for (int i = 0; i < noAgents; i++)
                 {
-                    noAgents -= 1;
-                    Invoke(nameof(Reproduce), 0.2f);
-                    timeSincePopulating = Time.time;
+                    if (!IsInvoking("Reproduce") && Time.time - timeSincePopulating > 0.02)
+                    {
+                        noAgents -= 1;
+                        Invoke(nameof(Reproduce), 0.02f);
+                        timeSincePopulating = Time.time;
+                    }
                 }
             }
 
@@ -100,7 +106,8 @@ namespace Assets.ThirdPerson
                 timeSinceUpdate = Time.time;
                 m_Character.ChangeAnimatorState(0.0f);
                 destination = FindDestination();
-                agent.SetDestination(destination);
+                if(destination != null)
+                    agent.SetDestination((Vector3)destination);
                 agent.isStopped = true;
                 isPositionAcquired = true;
             }
@@ -127,9 +134,9 @@ namespace Assets.ThirdPerson
             BroadcastSatysfyingNeedsSpots(satisfyNeedsRange);
         }
 
-        private Vector3 FindDestination()
+        private Vector3? FindDestination()
         {
-            Vector3 destination = new Vector3(0f, 0f, 0f);
+            Vector3? destination;
 
             switch (m_Model.PurposeOfLife)
             {
@@ -162,6 +169,9 @@ namespace Assets.ThirdPerson
                     Debug.Log("Looking for Higher order needs");
                     //destination = new Vector3(88.4f, 1.25f, -111.24f);
                     destination = FindClosestSpot(highSpots);
+                    break;
+                default:
+                    destination = null;
                     break;
             }
 
@@ -243,7 +253,14 @@ namespace Assets.ThirdPerson
 
         private void Reproduce()
         {
-            GameObject kid = Instantiate(gameObject, transform.parent);
+            //GameObject kid = Instantiate(gameObject, transform.parent); 
+            var pos_x = UnityEngine.Random.Range(65.7f, 112.5f);
+            var pos_y = UnityEngine.Random.Range(-150f, -133.2f);
+
+            var position = new Vector3(pos_x, 1, pos_y);
+
+            //GameObject kid = Instantiate(gameObject, transform.parent);
+            GameObject kid = Instantiate(gameObject, position, new Quaternion());
             int char_num = 30 - noAgents;
             kid.name = "agent_" + char_num.ToString();
             //kid.transform.tag = "agent_"+ char_num.ToString();
@@ -251,6 +268,6 @@ namespace Assets.ThirdPerson
             if(CurrentPartner != null)
                 CurrentPartner.GetComponent<ThirdPersonUserControl>().Children.Add(kid.transform);
             CancelInvoke("Reproduce");
-        }
     }
+}
 }

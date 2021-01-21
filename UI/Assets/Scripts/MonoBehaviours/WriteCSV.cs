@@ -10,19 +10,34 @@ public class WriteCSV : MonoBehaviour
 {
     private double time;
     private GameObject[] agents;
+    private int i = 0;
 
     void Start()
     {
-        time = 0;
-        agents = GameObject.FindGameObjectsWithTag("Agent");
-        string filePath = Application.dataPath + "/Data/" + "Needs.csv";
-        StreamWriter writer = new StreamWriter(filePath);
-        writer.Close();
     }
 
     // Update is called once per frame
     void Update()
     {
+
+        i++;
+        if (i == 300)
+        {
+            try
+            {
+                Directory.CreateDirectory(Application.dataPath + "/Data");
+            }
+            catch
+            {
+            }
+
+            time = 0;
+            agents = GameObject.FindGameObjectsWithTag("Agent");
+            string filePath = Application.dataPath + "/Data/" + "Needs.csv";
+            StreamWriter writer = new StreamWriter(filePath);
+            writer.Close();
+        }
+
         int counter = 0;
         if((time += Time.deltaTime) >= 1)
         {

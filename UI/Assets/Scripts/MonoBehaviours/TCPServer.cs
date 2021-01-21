@@ -32,7 +32,7 @@ public class TCPServer : MonoBehaviour
 	void Update()
 	{
 		i++;
-		if ( i == 3000)
+		if ( i == 300)
         {
 			var agentObjs = GameObject.FindGameObjectsWithTag("Agent");
 
@@ -110,11 +110,13 @@ public class TCPServer : MonoBehaviour
 			//here is possible to add more needs if needed
 			foreach (var agent in agents)
 			{
-				msg += String.Format(iFormatProvider, "{0:0.#######}", agent.Need.FoodNeed.Value) + ","
-					+ String.Format(iFormatProvider, "{0:0.#######}", agent.Need.WaterNeed.Value) + ","
-					+ String.Format(iFormatProvider, "{0:0.#######}", agent.Need.DreamNeed.Value) + ","
-					+ String.Format(iFormatProvider, "{0:0.#######}", agent.Need.SexNeed.Value) + ","
-					+ String.Format(iFormatProvider, "{0:0.#######}", agent.Need.ToiletNeed.Value) + ",1\n";
+				msg += String.Format(iFormatProvider, "{0:0.###}", agent.Need.FoodNeed.Value) + ","
+					+ String.Format(iFormatProvider, "{0:0.###}", agent.Need.WaterNeed.Value) + ","
+					+ String.Format(iFormatProvider, "{0:0.###}", agent.Need.DreamNeed.Value) + ","
+					+ String.Format(iFormatProvider, "{0:0.###}", agent.Need.SexNeed.Value) + ","
+					+ String.Format(iFormatProvider, "{0:0.###}", agent.Need.ToiletNeed.Value) + ","
+					//+ "1\n";
+					+ String.Format(iFormatProvider, "{0:0.###}", agent.Need.HigherOrderNeeds.Value) + "\n";
 			}
 
 			SendMessage(msg);
@@ -131,7 +133,7 @@ public class TCPServer : MonoBehaviour
 				var iterator = 0;
 				foreach (var d in dataForAgents)
 				{
-					agents[iterator].Need.PurposeOfLife = (ListOfNeeds)Convert.ToInt32(d);
+					agents[iterator].Need.PurposeOfLife = (ListOfNeeds?)Convert.ToInt32(d);
 					iterator++;
 				}
 			}
