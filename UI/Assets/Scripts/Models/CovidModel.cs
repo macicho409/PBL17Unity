@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Collections;
 using UnityEngine;
 using Assets.Scripts.Models.Enums;
+using Assets.Scripts.Services;
 
 public class CovidModel
 {
@@ -68,7 +69,7 @@ public class CovidModel
                 - maskWeigth * (float)Convert.ToDouble(covidAgent.GetComponent<Mask>().MaskOn)).LimitToRange(0f, 1.0f);
 
             
-            if ((samplingTime += Time.deltaTime) >= 5)
+            if ((samplingTime += Time.deltaTime) >= StaticContainerService.SampleTimeCovid)
             {
                 if ((int)(probability * 3.0f) >= rand.Next(0, 100)) Infected = true;
                 samplingTime = 0;

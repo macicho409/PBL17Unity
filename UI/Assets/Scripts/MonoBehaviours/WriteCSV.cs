@@ -39,7 +39,7 @@ public class WriteCSV : MonoBehaviour
         }
 
         int counter = 0;
-        if((time += Time.deltaTime) >= 1)
+        if((time += Time.deltaTime) >= 100)
         {
             string filePath = Application.dataPath + "/Data/" + "Needs.csv";
             try

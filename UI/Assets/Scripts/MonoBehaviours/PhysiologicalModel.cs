@@ -10,6 +10,7 @@ using UnityEngine.UI;
 using Assets.Scripts.Models.Enums;
 using Assets.ThirdPerson;
 using Debug = UnityEngine.Debug;
+using Assets.Scripts.Services;
 
 public class PhysiologicalModel : MonoBehaviour
 {
@@ -40,17 +41,20 @@ public class PhysiologicalModel : MonoBehaviour
     private int counter = 0;
     private readonly System.Random rnd = new System.Random();
 
+
+
     #endregion
 
     void Start()
     {
         agent = GetComponent<ThirdPersonUserControl>();
 
+
         FoodNeed = new Need
         {
             Value = UnityEngine.Random.Range(0.3f, 1.0f),
             ActionCost = UnityEngine.Random.Range(0.03f, 0.1f),
-            TimeWeight = UnityEngine.Random.Range(0.003f, 0.01f),
+            TimeWeight = StaticContainerService.WeightTimeFood,
             Name = "Food",
             OnUpdateFunc = (float value, float actionCost, float timeWeight, float action, float time) =>
             value - (action * actionCost + timeWeight) * (float)Math.Sqrt(value) * time,
@@ -61,7 +65,7 @@ public class PhysiologicalModel : MonoBehaviour
         {
             Value = UnityEngine.Random.Range(0.3f, 1.0f),
             ActionCost = UnityEngine.Random.Range(0.03f, 0.1f),
-            TimeWeight = UnityEngine.Random.Range(0.003f, 0.01f),
+            TimeWeight = StaticContainerService.WeightTimeWater,
             Name = "Water",
             OnUpdateFunc = (float value, float actionCost, float timeWeight, float action, float time) =>
             value - (action * actionCost + timeWeight) * (float)Math.Sqrt(value) * time,
@@ -72,7 +76,7 @@ public class PhysiologicalModel : MonoBehaviour
         {
             Value = UnityEngine.Random.Range(0.3f, 1.0f),
             ActionCost = UnityEngine.Random.Range(0.03f, 0.1f),
-            TimeWeight = UnityEngine.Random.Range(0.003f, 0.01f),
+            TimeWeight = StaticContainerService.WeightTimeSleep,
             Name = "Dream",
             OnUpdateFunc = (float value, float actionCost, float timeWeight, float action, float time) =>
             value - (action * actionCost + timeWeight) * (float)Math.Sqrt(value) * time,
@@ -84,7 +88,7 @@ public class PhysiologicalModel : MonoBehaviour
             LowerLimit = 0.3f,
             Value = UnityEngine.Random.Range(0.3f, 1.0f),
             ActionCost = UnityEngine.Random.Range(0.03f, 0.1f),
-            TimeWeight = UnityEngine.Random.Range(0.003f, 0.01f),
+            TimeWeight = StaticContainerService.WeightTimeSex,
             Name = "Sex",
             OnUpdateFunc = (float value, float actionCost, float timeWeight, float action, float time) =>
             value - timeWeight * (float)Math.Sqrt(value - 0.3f) * time,
@@ -95,7 +99,7 @@ public class PhysiologicalModel : MonoBehaviour
         {
             Value = UnityEngine.Random.Range(0.3f, 1.0f),
             ActionCost = UnityEngine.Random.Range(0.03f, 0.1f),
-            TimeWeight = UnityEngine.Random.Range(0.003f, 0.01f),
+            TimeWeight = StaticContainerService.WeightTimeToilet,
             Name = "Toilet",
             OnUpdateFunc = (float value, float actionCost, float timeWeight, float action, float time) =>
             value - timeWeight * (float)Math.Sqrt(value) * time,
@@ -106,7 +110,7 @@ public class PhysiologicalModel : MonoBehaviour
         {
             Value = UnityEngine.Random.Range(0.3f, 1.0f),
             ActionCost = UnityEngine.Random.Range(0.003f, 0.05f),
-            TimeWeight = UnityEngine.Random.Range(0.003f, 0.01f),
+            TimeWeight = StaticContainerService.WeightTimeHigerNeeds,
             Name = "HigherOrderNeeds",
             OnUpdateFunc = (float value, float actionCost, float timeWeight, float action, float time) =>
             value - (action * actionCost + timeWeight) * (float)Math.Sqrt(value) * time,
