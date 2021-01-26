@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using Assets.Scripts.Services;
 
 public class FillDisplay : MonoBehaviour
 {
@@ -23,6 +24,7 @@ public class FillDisplay : MonoBehaviour
 
     public void TextUpdateNoNormalization(float value)
     {
-        textNumberOfFill.text = Mathf.RoundToInt(value).ToString();
+        StaticContainerService.NoAgents = Mathf.RoundToInt(value);
+        textNumberOfFill.text = StaticContainerService.NoAgents.ToString();
     }
 }

@@ -9,6 +9,7 @@ using UnityEngine.PlayerLoop;
 using UnityEngine.UI;
 using Assets.Scripts.Models.Enums;
 using Assets.ThirdPerson;
+using Debug = UnityEngine.Debug;
 
 public class PhysiologicalModel : MonoBehaviour
 {
@@ -26,8 +27,7 @@ public class PhysiologicalModel : MonoBehaviour
         } 
     }
 
-    public enum ListOfNeeds { Food, Water, Dream, Sex, Toilet, HigherOrderNeeds };
-    public ListOfNeeds PurposeOfLife { get; set; }
+    public ListOfNeeds? PurposeOfLife { get; set; }
     public Need FoodNeed { get; set; }
     public Need WaterNeed { get; set; }
     public Need DreamNeed { get; set; }
@@ -38,75 +38,82 @@ public class PhysiologicalModel : MonoBehaviour
     private Vector3 PreviousPosition;
     private ThirdPersonUserControl agent;
     private int counter = 0;
-    private System.Random rnd = new System.Random();
+    private readonly System.Random rnd = new System.Random();
 
     #endregion
 
     void Start()
     {
         agent = GetComponent<ThirdPersonUserControl>();
+
         FoodNeed = new Need
         {
-            Value = 1.0f,
-            ActionCost = 0.1f,
-            TimeWeight = 0.01f,
+            Value = UnityEngine.Random.Range(0.3f, 1.0f),
+            ActionCost = UnityEngine.Random.Range(0.03f, 0.1f),
+            TimeWeight = UnityEngine.Random.Range(0.003f, 0.01f),
             Name = "Food",
             OnUpdateFunc = (float value, float actionCost, float timeWeight, float action, float time) =>
-            value - (action * actionCost + timeWeight) * (float)Math.Sqrt(value) * time
+            value - (action * actionCost + timeWeight) * (float)Math.Sqrt(value) * time,
+            OnUpdateFuncSatisfy = (float value, float timeWeight, float time) => 1.0f
         };
 
         WaterNeed = new Need
         {
-            Value = 1.0f,
-            ActionCost = 0.1f,
-            TimeWeight = 0.01f,
+            Value = UnityEngine.Random.Range(0.3f, 1.0f),
+            ActionCost = UnityEngine.Random.Range(0.03f, 0.1f),
+            TimeWeight = UnityEngine.Random.Range(0.003f, 0.01f),
             Name = "Water",
             OnUpdateFunc = (float value, float actionCost, float timeWeight, float action, float time) =>
-            value - (action * actionCost + timeWeight) * (float)Math.Sqrt(value) * time
+            value - (action * actionCost + timeWeight) * (float)Math.Sqrt(value) * time,
+            OnUpdateFuncSatisfy = (float value, float timeWeight, float time) => 1.0f
         };
 
         DreamNeed = new Need
         {
-            Value = 1.0f,
-            ActionCost = 0.1f,
-            TimeWeight = 0.01f,
+            Value = UnityEngine.Random.Range(0.3f, 1.0f),
+            ActionCost = UnityEngine.Random.Range(0.03f, 0.1f),
+            TimeWeight = UnityEngine.Random.Range(0.003f, 0.01f),
             Name = "Dream",
             OnUpdateFunc = (float value, float actionCost, float timeWeight, float action, float time) =>
-            value - (action * actionCost + timeWeight) * (float)Math.Sqrt(value) * time
+            value - (action * actionCost + timeWeight) * (float)Math.Sqrt(value) * time,
+            OnUpdateFuncSatisfy = (float value, float timeWeight, float time) => 1.0f
         };
 
         SexNeed = new Need
         {
             LowerLimit = 0.3f,
-            Value = 1.0f,
-            ActionCost = 0.1f,
-            TimeWeight = 0.01f,
+            Value = UnityEngine.Random.Range(0.3f, 1.0f),
+            ActionCost = UnityEngine.Random.Range(0.03f, 0.1f),
+            TimeWeight = UnityEngine.Random.Range(0.003f, 0.01f),
             Name = "Sex",
             OnUpdateFunc = (float value, float actionCost, float timeWeight, float action, float time) =>
-            value - timeWeight * (float)Math.Sqrt(value - 0.3f) * time
+            value - timeWeight * (float)Math.Sqrt(value - 0.3f) * time,
+            OnUpdateFuncSatisfy = (float value, float timeWeight, float time) => 1.0f
         };
 
         ToiletNeed = new Need
         {
-            Value = 1.0f,
-            ActionCost = 0.1f,
-            TimeWeight = 0.01f,
+            Value = UnityEngine.Random.Range(0.3f, 1.0f),
+            ActionCost = UnityEngine.Random.Range(0.03f, 0.1f),
+            TimeWeight = UnityEngine.Random.Range(0.003f, 0.01f),
             Name = "Toilet",
             OnUpdateFunc = (float value, float actionCost, float timeWeight, float action, float time) =>
-            value - timeWeight * (float)Math.Sqrt(value) * time
+            value - timeWeight * (float)Math.Sqrt(value) * time,
+            OnUpdateFuncSatisfy = (float value, float timeWeight, float time) => 1.0f
         };
 
         HigherOrderNeeds = new Need
         {
-            Value = 1.0f,
-            ActionCost = 0.05f,
-            TimeWeight = 0.01f,
+            Value = UnityEngine.Random.Range(0.3f, 1.0f),
+            ActionCost = UnityEngine.Random.Range(0.003f, 0.05f),
+            TimeWeight = UnityEngine.Random.Range(0.003f, 0.01f),
             Name = "HigherOrderNeeds",
             OnUpdateFunc = (float value, float actionCost, float timeWeight, float action, float time) =>
-            value - (action * actionCost + timeWeight) * (float)Math.Sqrt(value) * time
+            value - (action * actionCost + timeWeight) * (float)Math.Sqrt(value) * time,
+            OnUpdateFuncSatisfy = (float value, float timeWeight, float time) => 1.0f
         };
 
-        PurposeOfLife = ListOfNeeds.Food;
+        PurposeOfLife = null;
 
         PreviousPosition = this.transform.position;
     }
@@ -116,26 +123,27 @@ public class PhysiologicalModel : MonoBehaviour
         /* workaround for determining purpose of life
          * agent.isPositionAcquired can be used in fute to determine
          * whether the need is satisfied*/
-        counter++;
-        if(agent.isPositionAcquired & counter > 100)
-        {
-            PurposeOfLife = (ListOfNeeds)rnd.Next(6);
-            counter = 0;
-        }
+        //counter++;
+        //if (counter > 100)
+        //{
+        //    PurposeOfLife = (ListOfNeeds)rnd.Next(6);
+        //    counter = 0;
+        //    Debug.Log(PurposeOfLife.ToString());
+        //}
         /*end of workaroung*/
 
         float action = UpdateAction();
-        UpdateNeed(FoodNeed, action);
-        UpdateNeed(WaterNeed, action);
-        UpdateNeed(DreamNeed, action);
-        UpdateNeed(SexNeed, action);
-        UpdateNeed(ToiletNeed, action);
-        UpdateNeed(HigherOrderNeeds, action);
+        UpdateNeed(FoodNeed, action, agent.currentPossitionNeeds.Contains(ListOfNeeds.Food));
+        UpdateNeed(WaterNeed, action, agent.currentPossitionNeeds.Contains(ListOfNeeds.Water));
+        UpdateNeed(DreamNeed, action, agent.currentPossitionNeeds.Contains(ListOfNeeds.Dream));
+        UpdateNeed(SexNeed, action, agent.currentPossitionNeeds.Contains(ListOfNeeds.Sex));
+        UpdateNeed(ToiletNeed, action, agent.currentPossitionNeeds.Contains(ListOfNeeds.Toilet));
+        UpdateNeed(HigherOrderNeeds, action, agent.currentPossitionNeeds.Contains(ListOfNeeds.HigherOrderNeeds));
     }
 
-    private void UpdateNeed(Need need, float action)
+    private void UpdateNeed(Need need, float action, bool isNeedBeingSatisfied)
     {
-        need.Update(action, Time.deltaTime);
+        need.Update(action, Time.deltaTime, isNeedBeingSatisfied);
     }
 
     private float UpdateAction()

@@ -9,7 +9,13 @@ public class Covid : MonoBehaviour
 
     void Start()
     {
-        CovidInfection = new CovidModel(this.gameObject, 0.3f, 0.5f, 0.2f, this.transform.GetComponent<Mask>().Radius, Infected);
+        Infected = (UnityEngine.Random.Range(0f,1f) > 0.9f);
+
+        var distanceWeight = UnityEngine.Random.Range(0.001f, 0.1f);
+        var healthWeight = UnityEngine.Random.Range(0.001f, 0.3f);
+        var maskWeight = UnityEngine.Random.Range(0.001f, 0.4f);
+
+        CovidInfection = new CovidModel(this.gameObject, distanceWeight, healthWeight, maskWeight, this.transform.GetComponent<Mask>().Radius, Infected);
     }
 
     void Update()
@@ -29,7 +35,7 @@ public class Covid : MonoBehaviour
             {
                 var differentAgent = hitCollider.transform.GetComponent<Covid>();
 
-                if ((hitCollider.name != this.name) && differentAgent.CovidInfection.Infected)
+                if (differentAgent != null && (hitCollider.name != this.name) && differentAgent.CovidInfection != null && differentAgent.CovidInfection.Infected)
                     covids.Add(differentAgent);
             }
 

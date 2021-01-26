@@ -7,12 +7,17 @@ using UnityEngine.AI;
 using UnityStandardAssets.CrossPlatformInput;
 using System.Linq;
 using System.Threading;
+using Assets.Scripts.Models.Enums;
+using Assets.Scripts.Services;
+using System.Threading.Tasks;
 
 namespace Assets.ThirdPerson
 {
     [RequireComponent(typeof (ThirdPersonCharacter))]
     public class ThirdPersonUserControl : MonoBehaviour
     {
+        private readonly int satisfyNeedsRange = 5;
+
         public List<Transform> Children = new List<Transform>(); // Kids
         public List<Transform> Parents = new List<Transform>(); // Mother, father
         private ThirdPersonCharacter m_Character; // A reference to the ThirdPersonCharacter on the object
@@ -20,7 +25,7 @@ namespace Assets.ThirdPerson
         private PhysiologicalModel m_Model;
         NavMeshAgent agent;
         private bool m_Jump;
-        private Vector3 destination;
+        private Vector3? destination;
         private float timeSinceUpdate = 0;
         private float timeSincePopulating = 0;
         private float stopTime = 0;
@@ -36,10 +41,13 @@ namespace Assets.ThirdPerson
 
         private ThirdPersonCharacter m_Character2;
         private GameObject CurrentPartner;
-        private int noAgents = 30;
+        public int noAgents = 30;
+
+        public List<ListOfNeeds> currentPossitionNeeds;
 
         private void Start()
         {
+            noAgents = StaticContainerService.NoAgents - 1;
             // get the third person character ( this should never be null due to require component )
             agent = GetComponent<NavMeshAgent>();
             m_Character = GetComponent<ThirdPersonCharacter>();
@@ -61,10 +69,10 @@ namespace Assets.ThirdPerson
                                                GameObject.Find("highSpot_1").transform.position };
 
             agent.isStopped = false;
-            agent.SetDestination(foodSpots[0]);
+            //agent.SetDestination(foodSpots[0]);
             isPositionAcquired = false;
-            m_Character.ChangeAnimatorState(0.4f);
-            Debug.Log("Moving");
+            //m_Character.ChangeAnimatorState(0.4f);
+            //Debug.Log("Moving");
         }
 
 
@@ -79,14 +87,17 @@ namespace Assets.ThirdPerson
         // Fixed update is called in sync with physics
         private void FixedUpdate()
         {
-            if (agent.name == "Character Number 1" && noAgents > 0)
+            if (agent.name == "Bob" && noAgents > 0)
             {
-                    if (!IsInvoking("Reproduce") && Time.time - timeSincePopulating > 0.5)
+                for (int i = 0; i < noAgents; i++)
+                {
+                    if (!IsInvoking("Reproduce") && Time.time - timeSincePopulating > 0.02)
                     {
-                    noAgents -= 1;
-                    Invoke("Reproduce", 0.2f);
-                    timeSincePopulating = Time.time;
+                        noAgents -= 1;
+                        Invoke(nameof(Reproduce), 0.02f);
+                        timeSincePopulating = Time.time;
                     }
+                }
             }
 
             if (agent.remainingDistance < 2 && Time.time - timeSinceUpdate > 1)
@@ -95,11 +106,14 @@ namespace Assets.ThirdPerson
                 timeSinceUpdate = Time.time;
                 m_Character.ChangeAnimatorState(0.0f);
                 destination = FindDestination();
-                agent.SetDestination(destination);
+                if(destination != null)
+                    agent.SetDestination((Vector3)destination);
                 agent.isStopped = true;
                 isPositionAcquired = true;
             }
+
             Debug.Log("Need satisfied: _______________" + isNeedSatisfied.ToString());
+
             if (Time.time - timeSinceUpdate > 15 && agent.isStopped == true)
             {
                 Debug.Log("Moving");
@@ -109,55 +123,84 @@ namespace Assets.ThirdPerson
                 isNeedSatisfied = false;
                 isPositionAcquired = false;
             }
+
             if(agent.isStopped && timeSinceUpdate > 10)
             {
                 isNeedSatisfied = true;
             }
+
             m_Jump = false;
+
+            BroadcastSatysfyingNeedsSpots(satisfyNeedsRange);
         }
-        private Vector3 FindDestination()
+
+        private Vector3? FindDestination()
         {
-            Vector3 destination = new Vector3(0f, 0f, 0f);
+            Vector3? destination;
+
             switch (m_Model.PurposeOfLife)
             {
-                case (PhysiologicalModel.ListOfNeeds.Food):
+                case (ListOfNeeds.Food):
                     Debug.Log("Looking for Food");
                     //destination = new Vector3(139.92f, 1.25f, -157.4f);
                     destination = FindClosestSpot(foodSpots);
                     break;
-                case (PhysiologicalModel.ListOfNeeds.Water):
+                case (ListOfNeeds.Water):
                     Debug.Log("Looking for Water");
                     //destination = new Vector3(169.22f, 1.25f, -126.51f);
                     destination = FindClosestSpot(waterSpots);
                     break;
-                case (PhysiologicalModel.ListOfNeeds.Dream):
+                case (ListOfNeeds.Dream):
                     Debug.Log("Looking for Dream");
                     //destination = new Vector3(47.26f, 1.25f, -160.67f);
                     destination = FindClosestSpot(sleepSpots);
                     break;
-                case (PhysiologicalModel.ListOfNeeds.Sex):
+                case (ListOfNeeds.Sex):
                     Debug.Log("Looking for Sex");
                     //destination = new Vector3(120.24f, 1.25f, -148.21f);
                     destination = FindClosestSpot(sexSpots);
                     break;
-                case (PhysiologicalModel.ListOfNeeds.Toilet):
+                case (ListOfNeeds.Toilet):
                     Debug.Log("Looking for Toilet");
                     //destination = new Vector3(88.4f, 1.25f, -111.24f);
                     destination = FindClosestSpot(toiletSpots);
                     break;
-                case (PhysiologicalModel.ListOfNeeds.HigherOrderNeeds):
+                case (ListOfNeeds.HigherOrderNeeds):
                     Debug.Log("Looking for Higher order needs");
                     //destination = new Vector3(88.4f, 1.25f, -111.24f);
                     destination = FindClosestSpot(highSpots);
                     break;
+                default:
+                    destination = null;
+                    break;
             }
+
             return destination;
+        }
+
+        private void BroadcastSatysfyingNeedsSpots(int needSatisfyRange)
+        {
+            currentPossitionNeeds = new List<ListOfNeeds>();
+
+            foreach(var spot in foodSpots)
+                if (Vector3.Distance(spot, agent.transform.position) <= needSatisfyRange) currentPossitionNeeds.Add(ListOfNeeds.Food);
+            foreach (var spot in waterSpots)
+                if (Vector3.Distance(spot, agent.transform.position) <= needSatisfyRange) currentPossitionNeeds.Add(ListOfNeeds.Water);
+            foreach (var spot in sleepSpots)
+                if (Vector3.Distance(spot, agent.transform.position) <= needSatisfyRange) currentPossitionNeeds.Add(ListOfNeeds.Dream);
+            foreach (var spot in sexSpots)
+                if (Vector3.Distance(spot, agent.transform.position) <= needSatisfyRange) currentPossitionNeeds.Add(ListOfNeeds.Sex);
+            foreach (var spot in toiletSpots)
+                if (Vector3.Distance(spot, agent.transform.position) <= needSatisfyRange) currentPossitionNeeds.Add(ListOfNeeds.Toilet);
+            foreach (var spot in highSpots)
+                if (Vector3.Distance(spot, agent.transform.position) <= needSatisfyRange) currentPossitionNeeds.Add(ListOfNeeds.HigherOrderNeeds);
         }
 
         private Vector3 FindClosestSpot(List<Vector3> listOfSpots)
         {
             List<float> distances = new List<float>();
             int minimumValueIndex=0;
+
             foreach (Vector3 spot in listOfSpots)
             {
                 //agent.SetDestination(spot);
@@ -172,11 +215,14 @@ namespace Assets.ThirdPerson
                 }
                 else
                 {
-                    distances.Add(340282300000000);
+                    distances.Add(340282300000000); //magical number?
                 }
             }
+
             minimumValueIndex = distances.IndexOf(distances.Min());
+
             Debug.Log("Going to point: " + listOfSpots[minimumValueIndex].ToString() + "Index: " + minimumValueIndex.ToString());
+
             return listOfSpots[minimumValueIndex];
         }
 
@@ -189,6 +235,7 @@ namespace Assets.ThirdPerson
 
             return true;
         }
+
         private float GetPathLength(NavMeshPath path)
         {
             float lng = 0.0f;
@@ -206,13 +253,21 @@ namespace Assets.ThirdPerson
 
         private void Reproduce()
         {
-            GameObject kid = Instantiate(gameObject, transform.parent);
+            //GameObject kid = Instantiate(gameObject, transform.parent); 
+            var pos_x = UnityEngine.Random.Range(65.7f, 112.5f);
+            var pos_y = UnityEngine.Random.Range(-150f, -133.2f);
+
+            var position = new Vector3(pos_x, 1, pos_y);
+
+            //GameObject kid = Instantiate(gameObject, transform.parent);
+            GameObject kid = Instantiate(gameObject, position, new Quaternion());
             int char_num = 30 - noAgents;
             kid.name = "agent_" + char_num.ToString();
             //kid.transform.tag = "agent_"+ char_num.ToString();
             //kid.tag = "Character_Number_"+ char_num.ToString();
-            CurrentPartner.GetComponent<ThirdPersonUserControl>().Children.Add(kid.transform);
+            if(CurrentPartner != null)
+                CurrentPartner.GetComponent<ThirdPersonUserControl>().Children.Add(kid.transform);
             CancelInvoke("Reproduce");
-        }
     }
+}
 }

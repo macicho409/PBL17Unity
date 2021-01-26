@@ -17,7 +17,7 @@ public class LightManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (covid != null)
+        if (covid != null && covid.CovidInfection != null)
         {
             if (covid.CovidInfection.InfectionType == InfectionType.InfectedWithoutSymptoms)
             {
