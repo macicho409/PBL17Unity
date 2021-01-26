@@ -59,8 +59,18 @@ namespace Assets.ThirdPerson
                                              GameObject.Find("FoodSpot_1").transform.position };
             waterSpots = new List<Vector3>() {GameObject.Find("waterSpot_0").transform.position,
                                               GameObject.Find("waterSpot_1").transform.position };
-            sleepSpots = new List<Vector3>() {GameObject.Find("sleepSpot_0").transform.position,
-                                              GameObject.Find("sleepSpot_1").transform.position };
+            sleepSpots = new List<Vector3>() {
+                GameObject.Find("sleepSpot_0").transform.position,
+                GameObject.Find("sleepSpot_1").transform.position,
+                GameObject.Find("sleepSpot_2").transform.position,
+                GameObject.Find("sleepSpot_3").transform.position,
+                GameObject.Find("sleepSpot_4").transform.position,
+                GameObject.Find("sleepSpot_5").transform.position,
+                GameObject.Find("sleepSpot_6").transform.position,
+                GameObject.Find("sleepSpot_7").transform.position,
+                GameObject.Find("sleepSpot_8").transform.position,
+                GameObject.Find("sleepSpot_9").transform.position };
+
             sexSpots = new List<Vector3>() {GameObject.Find("sexSpot_0").transform.position,
                                             GameObject.Find("sexSpot_1").transform.position };
             toiletSpots = new List<Vector3>() {GameObject.Find("toiletSpot_0").transform.position,
