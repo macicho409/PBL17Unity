@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Collections;
 using UnityEngine;
 using Assets.Scripts.Models.Enums;
+using Assets.Scripts.Services;
 
 public class CovidModel
 {
@@ -36,7 +37,7 @@ public class CovidModel
     private readonly float healthWeigth;
     private readonly float maskWeigth;
 
-    public float sphereRadius { get; set; }
+    public float SphereRadius { get; set; }
 
     public CovidModel(GameObject thisAgent, float distanceWeigth, float healthWeigth, float maskWeigth, float sphereRadius, bool isInfected)
     {
@@ -44,9 +45,7 @@ public class CovidModel
         this.distanceWeigth = distanceWeigth;
         this.healthWeigth = healthWeigth;
         this.maskWeigth = maskWeigth;
-        this.sphereRadius = sphereRadius;
-
-        rand = new System.Random();
+        this.SphereRadius = sphereRadius;
 
         Infected = isInfected;
     }
@@ -57,7 +56,7 @@ public class CovidModel
         {
             var agentPhysiologicalModel = thisAgent.GetComponent<PhysiologicalModel>();
 
-            var r = sphereRadius - Mathf.Sqrt(
+            var r = SphereRadius - Mathf.Sqrt(
                 Mathf.Pow(thisAgent.transform.position.x - covidAgent.transform.position.x, 2) +
                 Mathf.Pow(thisAgent.transform.position.y - covidAgent.transform.position.y, 2) +
                 Mathf.Pow(thisAgent.transform.position.z - covidAgent.transform.position.z, 2));
@@ -68,9 +67,9 @@ public class CovidModel
                 - maskWeigth * (float)Convert.ToDouble(covidAgent.GetComponent<Mask>().MaskOn)).LimitToRange(0f, 1.0f);
 
             
-            if ((samplingTime += Time.deltaTime) >= 5)
+            if ((samplingTime += Time.deltaTime) >= StaticContainerService.SampleTimeCovid)
             {
-                if ((int)(probability * 3.0f) >= rand.Next(0, 100)) Infected = true;
+                if ((int)(probability * 3.0f) >= UnityEngine.Random.Range(0, 100)) Infected = true;
                 samplingTime = 0;
             }
         }
@@ -78,18 +77,14 @@ public class CovidModel
 
     public void SpecifyInfectionType() //change infection from healthy to ill
     {
-        switch(rand.Next(0, 2)) //IMPORTANT do not use 'switch' expression - Unity cannot understand modern programming style
-        {
-            case 0:
+        var infectionTypeProbability = UnityEngine.Random.Range(0f, 1f);
+
+        if(infectionTypeProbability < 0.5f)
                 InfectionType = InfectionType.InfectedWithoutSymptoms;
-                break;
-            case 1:
-                InfectionType = InfectionType.InfectedWithSymptoms;
-                break;
-            default:
-                InfectionType = InfectionType.SeriouslyIll;
-                break;
-        };
+        else if (infectionTypeProbability < 0.96f)
+            InfectionType = InfectionType.InfectedWithSymptoms;
+        else
+            InfectionType = InfectionType.SeriouslyIll;
     }
 }
 

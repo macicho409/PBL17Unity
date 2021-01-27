@@ -22,9 +22,56 @@ public class FillDisplay : MonoBehaviour
         textNumberOfFill.text = Mathf.RoundToInt((value - LowerLimit)/(UpperLimit - LowerLimit )* 100).ToString() + "%";
     }
 
-    public void TextUpdateNoNormalization(float value)
+    public void TextUpdateNoAgents(float value)
     {
         StaticContainerService.NoAgents = Mathf.RoundToInt(value);
         textNumberOfFill.text = StaticContainerService.NoAgents.ToString();
+    }
+
+    public void TextUpdateSampleTimeCovid(float value)
+    {
+        StaticContainerService.SampleTimeCovid = Mathf.RoundToInt(value);
+        textNumberOfFill.text = StaticContainerService.SampleTimeCovid.ToString();
+    }
+
+    public void TextUpdateWeightTimeSleep(float value)
+    {
+        StaticContainerService.WeightTimeSleep = value;
+        textNumberOfFill.text = StaticContainerService.WeightTimeSleep.ToString();
+    }
+
+    public void TextUpdateWeightTimeFood(float value)
+    {
+        StaticContainerService.WeightTimeFood = value;
+        textNumberOfFill.text = StaticContainerService.WeightTimeFood.ToString();
+    }
+
+    public void TextUpdateWeightTimeWater(float value)
+    {
+        StaticContainerService.WeightTimeWater = value;
+        textNumberOfFill.text = StaticContainerService.WeightTimeWater.ToString();
+    }
+
+    public void TextUpdateWeightTimeSex(float value)
+    {
+        StaticContainerService.WeightTimeSex = value;
+        textNumberOfFill.text = StaticContainerService.WeightTimeSex.ToString();
+    }
+
+    public void TextUpdateWeightTimeToilet(float value)
+    {
+        StaticContainerService.WeightTimeToilet = value;
+        textNumberOfFill.text = StaticContainerService.WeightTimeToilet.ToString();
+    }
+
+    public void TextUpdateWeightTimeHigerNeeds(float value)
+    {
+        StaticContainerService.WeightTimeHigerNeeds = value;
+        textNumberOfFill.text = StaticContainerService.WeightTimeHigerNeeds.ToString();
+    }
+
+    public void TextWeightTime(float value)
+    {
+        textNumberOfFill.text = value.ToString();
     }
 }
