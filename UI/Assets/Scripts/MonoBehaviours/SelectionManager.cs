@@ -16,6 +16,7 @@ public class SelectionManager : MonoBehaviour
     private TextMeshProUGUI charackterName;
 
     public Image covidImage;
+    private TextMeshProUGUI covidStatusTxt;
 
     private PhysiologicalModel characterPhysiologicalModel;
     private Arrow arrow;
@@ -43,6 +44,7 @@ public class SelectionManager : MonoBehaviour
         HigherOrderNeedsSlider = new NeedSlider(GameObject.Find(SliderEnum.HigherOrderNeedsSlider.ToString()).GetComponent<Slider>());
 
         charackterName = GameObject.Find("CharacterName").GetComponent<TextMeshProUGUI>();
+        covidStatusTxt = GameObject.Find("covidStatusTxt").GetComponent<TextMeshProUGUI>();
     }
 
     void Update()
@@ -53,15 +55,11 @@ public class SelectionManager : MonoBehaviour
             GetNeeds(hitInfo);
         }
 
-
         if (characterPhysiologicalModel != null)
         {
             UpdateNeedsDisplay();
             UpdateArrow();
         }
-
-
-
 
         UpdateImageCovid();
     }
@@ -78,7 +76,7 @@ public class SelectionManager : MonoBehaviour
         foodSlider.Value = characterPhysiologicalModel.FoodNeed.Value;
         waterSlider.Value = characterPhysiologicalModel.WaterNeed.Value;
         dreamSlider.Value = characterPhysiologicalModel.DreamNeed.Value;
-        sexSlider.Value = characterPhysiologicalModel.SexNeed.Value;
+        sexSlider.Value = characterPhysiologicalModel.LibidoNeed.Value;
         toiletSlider.Value = characterPhysiologicalModel.ToiletNeed.Value;
         HigherOrderNeedsSlider.Value = characterPhysiologicalModel.HigherOrderNeeds.Value;
         healthSlider.Value = characterPhysiologicalModel.Health;
@@ -90,9 +88,15 @@ public class SelectionManager : MonoBehaviour
         try
         {
             if (hitInfo.transform.GetComponent<Covid>().CovidInfection.Infected)
+            {
                 covidImage.color = new Color(0.9f, 0.9f, 0.9f);
+                covidStatusTxt.text = hitInfo.transform.GetComponent<Covid>().CovidInfection.InfectionType.ToString();
+            }
             else
+            {
                 covidImage.color = new Color(0.6f, 0.6f, 0.6f);
+                covidStatusTxt.text = "healthy";
+            }
         }
         catch { }
     }
@@ -114,6 +118,4 @@ public class SelectionManager : MonoBehaviour
         }
         previousarrow = arrow;
     }
-
-
 }

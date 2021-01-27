@@ -72,7 +72,7 @@ public class TCPServer : MonoBehaviour
 				using (connectedTcpClient = tcpListener.AcceptTcpClient())
 				{
 					// Get a stream object for reading 					
-					using (NetworkStream stream = connectedTcpClient.GetStream())
+					using (NetworkStream stream = connectedTcpClient.GetStream()) //IMPORTANT do not use modern using statement due to obsolete C# interpreter in Unity
 					{
 						int length;
 						// Read incomming stream into byte arrary. 						
@@ -104,7 +104,7 @@ public class TCPServer : MonoBehaviour
 		{
 			Debug.Log("Get recognized");
 
-			string msg = "";
+			var msg = "";
 			IFormatProvider iFormatProvider = new System.Globalization.CultureInfo("en");
 
 			//here is possible to add more needs if needed
@@ -113,7 +113,7 @@ public class TCPServer : MonoBehaviour
 				msg += String.Format(iFormatProvider, "{0:0.###}", agent.Need.FoodNeed.Value) + ","
 					+ String.Format(iFormatProvider, "{0:0.###}", agent.Need.WaterNeed.Value) + ","
 					+ String.Format(iFormatProvider, "{0:0.###}", agent.Need.DreamNeed.Value) + ","
-					+ String.Format(iFormatProvider, "{0:0.###}", agent.Need.SexNeed.Value) + ","
+					+ String.Format(iFormatProvider, "{0:0.###}", agent.Need.LibidoNeed.Value) + ","
 					+ String.Format(iFormatProvider, "{0:0.###}", agent.Need.ToiletNeed.Value) + ","
 					//+ "1\n";
 					+ String.Format(iFormatProvider, "{0:0.###}", agent.Need.HigherOrderNeeds.Value) + "\n";

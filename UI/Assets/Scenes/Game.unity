@@ -5380,7 +5380,7 @@ GameObject:
   - component: {fileID: 6248797814294767194}
   - component: {fileID: 6248797814294767193}
   m_Layer: 8
-  m_Name: Bob
+  m_Name: agent_0
   m_TagString: Agent
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

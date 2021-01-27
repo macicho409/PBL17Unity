@@ -21,7 +21,7 @@ public class Covid : MonoBehaviour
     void Update()
     {
         DetectCollisions();
-        CovidInfection.sphereRadius = this.transform.GetComponent<Mask>().Radius;
+        CovidInfection.SphereRadius = this.transform.GetComponent<Mask>().Radius;
     }
 
     private void DetectCollisions()
