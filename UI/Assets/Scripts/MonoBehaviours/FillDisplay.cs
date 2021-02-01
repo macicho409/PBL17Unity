@@ -22,6 +22,12 @@ public class FillDisplay : MonoBehaviour
         textNumberOfFill.text = Mathf.RoundToInt((value - LowerLimit)/(UpperLimit - LowerLimit )* 100).ToString() + "%";
     }
 
+    public void TextUpdateCovidDelay(float value)
+    {
+        StaticContainerService.CovidDelay = Mathf.RoundToInt(value);
+        textNumberOfFill.text = StaticContainerService.CovidDelay.ToString();
+    }
+
     public void TextUpdateNoAgents(float value)
     {
         StaticContainerService.NoAgents = Mathf.RoundToInt(value);

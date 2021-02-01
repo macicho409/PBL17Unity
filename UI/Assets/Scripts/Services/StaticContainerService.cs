@@ -18,5 +18,7 @@ namespace Assets.Scripts.Services
         public static float WeightTimeHigerNeeds = 0.01f;
 
         public static int SampleTimeCovid = 1;
+
+        public static int CovidDelay = 30;
     }
 }
