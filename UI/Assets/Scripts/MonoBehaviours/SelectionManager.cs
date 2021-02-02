@@ -49,8 +49,11 @@ public class SelectionManager : MonoBehaviour
 
     void Update()
     {
-        //Shot ray from center of Main Camera on Mouse click. If the ray encounters an Object with PhysiologicalModel attached to it then get PhysiologicalModel from Object 
-        if (Input.GetMouseButtonDown(0) && Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hitInfo) && hitInfo.transform.GetComponent<PhysiologicalModel>())
+        //Shot ray from center of Main Camera on Mouse click. 
+        //If the ray encounters an Object with PhysiologicalModel attached to it then get PhysiologicalModel from Object 
+        if (Input.GetMouseButtonDown(0) && 
+            Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hitInfo) && 
+            hitInfo.transform.GetComponent<PhysiologicalModel>())
         {
             GetNeeds(hitInfo);
         }
@@ -95,7 +98,7 @@ public class SelectionManager : MonoBehaviour
             else
             {
                 covidImage.color = new Color(0.6f, 0.6f, 0.6f);
-                covidStatusTxt.text = "healthy";
+                covidStatusTxt.text = InfectionType.Healthy.ToString();
             }
         }
         catch { }

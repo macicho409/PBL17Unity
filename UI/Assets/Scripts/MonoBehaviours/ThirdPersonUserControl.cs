@@ -169,7 +169,7 @@ namespace Assets.ThirdPerson
                     //destination = FindClosestSpot(sleepSpots);
                     destination = m_Model.SleepSpot;
                     break;
-                case (ListOfNeeds.Sex):
+                case (ListOfNeeds.Libido):
                     //Debug.Log("Looking for Sex");
                     destination = FindClosestSpot(sexSpots);
                     break;
@@ -198,7 +198,7 @@ namespace Assets.ThirdPerson
             foreach (var spot in waterSpots)
                 if (Vector3.Distance(spot, agent.transform.position) <= needSatisfyRange) currentPossitionNeeds.Add(ListOfNeeds.Water);
             foreach (var spot in sexSpots)
-                if (Vector3.Distance(spot, agent.transform.position) <= needSatisfyRange) currentPossitionNeeds.Add(ListOfNeeds.Sex);
+                if (Vector3.Distance(spot, agent.transform.position) <= needSatisfyRange) currentPossitionNeeds.Add(ListOfNeeds.Libido);
             foreach (var spot in toiletSpots)
                 if (Vector3.Distance(spot, agent.transform.position) <= needSatisfyRange) currentPossitionNeeds.Add(ListOfNeeds.Toilet);
             foreach (var spot in highSpots)

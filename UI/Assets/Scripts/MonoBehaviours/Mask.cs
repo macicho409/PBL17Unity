@@ -4,26 +4,23 @@ using UnityEngine;
 
 public class Mask : MonoBehaviour
 {
-    public bool MaskOn;
+    private bool _maskOn;
+    public bool MaskOn { 
+        set {
+            _maskOn = value;
 
-    public float Radius {set; get;}
+            if (value)
+                Radius = 2.5f;
+            else
+                Radius = 5.0f;
+        } 
+        get { return _maskOn; } 
+    }
+
+    public float Radius { set; get; }
 
     void Start()
     {
         MaskOn = false;
-        Radius = 5.0f;
-    }
-
-    // The concept is to put on a physical mask
-    void Update()
-    {
-        if(MaskOn)
-        {
-            Radius = 2.5f; 
-        }
-        else
-        {
-            Radius = 5.0f;
-        }
     }
 }

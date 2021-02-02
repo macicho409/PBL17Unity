@@ -34,6 +34,7 @@ namespace Assets.Scripts.Models
         /// Pass lambda expression to change what's happening on Update method in form: (value, actionCost, timeWeight, action, time)
         /// </summary>
         public Func<float, float, float, float, float, float> OnUpdateFunc { get; set; }
+
         /// <summary>
         /// Pass lambda expression to change what's happening on Update method in form: (value, timeWeight, time)
         /// </summary>

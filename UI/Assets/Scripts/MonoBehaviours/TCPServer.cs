@@ -32,7 +32,7 @@ public class TCPServer : MonoBehaviour
 	void Update()
 	{
 		i++;
-		if ( i == 300)
+		if ( i == 1000)
         {
 			var agentObjs = GameObject.FindGameObjectsWithTag("Agent");
 
@@ -70,17 +70,16 @@ public class TCPServer : MonoBehaviour
 			while (true)
 			{
 				using (connectedTcpClient = tcpListener.AcceptTcpClient())
-				{
-					// Get a stream object for reading 					
+				{				
 					using (NetworkStream stream = connectedTcpClient.GetStream()) //IMPORTANT do not use modern using statement due to obsolete C# interpreter in Unity
 					{
 						int length;
-						// Read incomming stream into byte arrary. 						
+						
 						while ((length = stream.Read(bytes, 0, bytes.Length)) != 0)
 						{
 							var incommingData = new byte[length];
 							Array.Copy(bytes, 0, incommingData, 0, length);
-							// Convert byte array to string message. 							
+							//byte array to string msg							
 							var clientMessage = Encoding.ASCII.GetString(incommingData);
 							Debug.Log("client message received as: " + clientMessage);
 
@@ -100,7 +99,7 @@ public class TCPServer : MonoBehaviour
     {
 		var telegram = clientMessage.Split(';')[0];
 
-		if(telegram == "GN" || telegram == "GetNeeds")
+		if (telegram == "GN" || telegram == "GetNeeds")
 		{
 			Debug.Log("Get recognized");
 
@@ -115,7 +114,6 @@ public class TCPServer : MonoBehaviour
 					+ String.Format(iFormatProvider, "{0:0.###}", agent.Need.DreamNeed.Value) + ","
 					+ String.Format(iFormatProvider, "{0:0.###}", agent.Need.LibidoNeed.Value) + ","
 					+ String.Format(iFormatProvider, "{0:0.###}", agent.Need.ToiletNeed.Value) + ","
-					//+ "1\n";
 					+ String.Format(iFormatProvider, "{0:0.###}", agent.Need.HigherOrderNeeds.Value) + "\n";
 			}
 

@@ -17,8 +17,7 @@ public class WriteCSV : MonoBehaviour
     void Update()
     {
         i++;
-        if (i == 300)
-        {
+        if (i == 1000) {
             try
             {
                 Directory.CreateDirectory(Application.dataPath + "/Data");
@@ -33,60 +32,61 @@ public class WriteCSV : MonoBehaviour
             StreamWriter writer = new StreamWriter(filePath);
             writer.Close();
         }
+        
+        if(i > 1000) {
+            int covidCounter = 0;
+            int covidIllWithNoSypmtomsCounter = 0;
+            int covidIllWithSypmtomsCounter = 0;
+            int covidSeriouslyIllCounter = 0;
 
-        int covidCounter = 0;
-        int covidIllWithNoSypmtomsCounter = 0;
-        int covidIllWithSypmtomsCounter = 0;
-        int covidSeriouslyIllCounter = 0;
+            IFormatProvider iFormatProvider = new System.Globalization.CultureInfo("en");
 
-        IFormatProvider iFormatProvider = new System.Globalization.CultureInfo("en");
-
-        if ((time += Time.deltaTime) >= 10)
-        {
-            try
-            {
-                StreamWriter writer = new StreamWriter(filePath, true);
-
-                writer.WriteLine("#TIMESTAMP");
-                writer.WriteLine(DateTimeService.CurrentDateTime);
-
-                writer.WriteLine("#NEEDS");
-
-                foreach (GameObject agent in agents)
+            if ((time += Time.deltaTime) >= 30) {
+                try
                 {
-                    PhysiologicalModel need = agent.GetComponent<PhysiologicalModel>();
-                    Covid covid = agent.GetComponent<Covid>();
-                    writer.WriteLine(String.Format(iFormatProvider, "{0:0.###}", need.FoodNeed.Value) + ","
-                    + String.Format(iFormatProvider, "{0:0.###}", need.WaterNeed.Value) + ","
-                    + String.Format(iFormatProvider, "{0:0.###}", need.DreamNeed.Value) + ","
-                    + String.Format(iFormatProvider, "{0:0.###}", need.LibidoNeed.Value) + ","
-                    + String.Format(iFormatProvider, "{0:0.###}", need.ToiletNeed.Value) + ","
-                    + String.Format(iFormatProvider, "{0:0.###}", need.HigherOrderNeeds.Value));
+                    StreamWriter writer = new StreamWriter(filePath, true);
 
-                    if (covid.Infected)
-                        covidCounter++;
-                    if (covid.CovidInfection.InfectionType == Assets.Scripts.Models.Enums.InfectionType.InfectedWithoutSymptoms)
-                        covidIllWithNoSypmtomsCounter++;
-                    if (covid.CovidInfection.InfectionType == Assets.Scripts.Models.Enums.InfectionType.InfectedWithSymptoms)
-                        covidIllWithSypmtomsCounter++;
-                    if (covid.CovidInfection.InfectionType == Assets.Scripts.Models.Enums.InfectionType.SeriouslyIll)
-                        covidSeriouslyIllCounter++;
+                    writer.WriteLine("#TIMESTAMP");
+                    writer.WriteLine(DateTimeService.CurrentDateTime);
+
+                    writer.WriteLine("#NEEDS");
+
+                    foreach (GameObject agent in agents)
+                    {
+                        PhysiologicalModel need = agent.GetComponent<PhysiologicalModel>();
+                        Covid covid = agent.GetComponent<Covid>();
+                        writer.WriteLine(String.Format(iFormatProvider, "{0:0.###}", need.FoodNeed.Value) + ","
+                        + String.Format(iFormatProvider, "{0:0.###}", need.WaterNeed.Value) + ","
+                        + String.Format(iFormatProvider, "{0:0.###}", need.DreamNeed.Value) + ","
+                        + String.Format(iFormatProvider, "{0:0.###}", need.LibidoNeed.Value) + ","
+                        + String.Format(iFormatProvider, "{0:0.###}", need.ToiletNeed.Value) + ","
+                        + String.Format(iFormatProvider, "{0:0.###}", need.HigherOrderNeeds.Value));
+
+                        if (covid.Infected)
+                            covidCounter++;
+                        if (covid.CovidInfection.InfectionType == Assets.Scripts.Models.Enums.InfectionType.InfectedWithoutSymptoms)
+                            covidIllWithNoSypmtomsCounter++;
+                        if (covid.CovidInfection.InfectionType == Assets.Scripts.Models.Enums.InfectionType.InfectedWithSymptoms)
+                            covidIllWithSypmtomsCounter++;
+                        if (covid.CovidInfection.InfectionType == Assets.Scripts.Models.Enums.InfectionType.SeriouslyIll)
+                            covidSeriouslyIllCounter++;
+                    }
+
+                    writer.WriteLine("#INFECTED");
+                    writer.WriteLine(covidCounter.ToString());
+                    writer.WriteLine("#INFECTED_NO_SYMPTOMS");
+                    writer.WriteLine(covidIllWithNoSypmtomsCounter.ToString());
+                    writer.WriteLine("#INFECTED_MILD_SYMPTOMS");
+                    writer.WriteLine(covidIllWithSypmtomsCounter.ToString());
+                    writer.WriteLine("#INFECTED_SERIOUSLY_ILL");
+                    writer.WriteLine(covidSeriouslyIllCounter.ToString());
+                    writer.WriteLine("");
+                    writer.Flush();
+                    writer.Close();
                 }
-
-                writer.WriteLine("#INFECTED");
-                writer.WriteLine(covidCounter.ToString());
-                writer.WriteLine("#INFECTED_NO_SYMPTOMS");
-                writer.WriteLine(covidIllWithNoSypmtomsCounter.ToString());
-                writer.WriteLine("#INFECTED_MILD_SYMPTOMS");
-                writer.WriteLine(covidIllWithSypmtomsCounter.ToString());
-                writer.WriteLine("#INFECTED_SERIOUSLY_ILL");
-                writer.WriteLine(covidSeriouslyIllCounter.ToString());
-                writer.WriteLine("");
-                writer.Flush();
-                writer.Close();
+                catch { }
+                time = 0;
             }
-            catch { }
-            time = 0;
         }
     }
 }

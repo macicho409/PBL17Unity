@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Collections;
 using UnityEngine;
+using Assets.Scripts.Services;
 
 public class Covid : MonoBehaviour
 {
@@ -29,7 +30,7 @@ public class Covid : MonoBehaviour
         Collider[] hitColliders = Physics.OverlapSphere(this.transform.position, this.transform.GetComponent<Mask>().Radius, 256);
         List<Covid> covids = new List<Covid>();
 
-        if(!this.Infected)
+        if (!this.Infected && DateTimeService.CurrentDateTime > DateTimeService.StartSimulationTime)
         {
             foreach (var hitCollider in hitColliders)
             {

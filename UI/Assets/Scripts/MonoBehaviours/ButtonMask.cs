@@ -37,11 +37,7 @@ public class ButtonMask : MonoBehaviour
                 agent.GetComponent<Mask>().MaskOn = false;
                 button.image.color = red;
             }
-                
         }
-
-        
-
     }
 
     public void ButtonOn()
